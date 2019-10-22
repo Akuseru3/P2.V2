@@ -61,10 +61,6 @@ public class configWindow extends javax.swing.JFrame {
         panelFixed = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         txtPartition = new javax.swing.JTextField();
-        btnAddPartition = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listPartitions = new javax.swing.JList<>();
-        btnRemovePartition = new javax.swing.JButton();
         lblBG1 = new javax.swing.JLabel();
         panelPaging = new javax.swing.JPanel();
         txtPageSize = new javax.swing.JTextField();
@@ -178,7 +174,7 @@ public class configWindow extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Partition size");
-        panelFixed.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, -1, -1));
+        panelFixed.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, -1, -1));
 
         txtPartition.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtPartition.addActionListener(new java.awt.event.ActionListener() {
@@ -186,34 +182,7 @@ public class configWindow extends javax.swing.JFrame {
                 txtPartitionActionPerformed(evt);
             }
         });
-        panelFixed.add(txtPartition, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 160, 30));
-
-        btnAddPartition.setBackground(new java.awt.Color(114, 137, 218));
-        btnAddPartition.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAddPartition.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddPartition.setText("New partition");
-        btnAddPartition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddPartitionActionPerformed(evt);
-            }
-        });
-        panelFixed.add(btnAddPartition, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 160, 30));
-
-        listPartitions.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jScrollPane2.setViewportView(listPartitions);
-
-        panelFixed.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 210, 130));
-
-        btnRemovePartition.setBackground(new java.awt.Color(114, 137, 218));
-        btnRemovePartition.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnRemovePartition.setForeground(new java.awt.Color(255, 255, 255));
-        btnRemovePartition.setText("Remove partition");
-        btnRemovePartition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemovePartitionActionPerformed(evt);
-            }
-        });
-        panelFixed.add(btnRemovePartition, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, 160, 30));
+        panelFixed.add(txtPartition, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 160, 30));
 
         lblBG1.setBackground(new java.awt.Color(44, 47, 51));
         lblBG1.setOpaque(true);
@@ -380,7 +349,7 @@ public class configWindow extends javax.swing.JFrame {
         segmentList.clear();
         DefaultListModel<String> model = new DefaultListModel<>();        
         listSegments.setModel(model);
-        listPartitions.setModel(model);
+        
         
         JFileChooser fileChooser = new JFileChooser();
         FileFilter filter = new FileNameExtensionFilter("ASM Files","cpu");
@@ -421,15 +390,16 @@ public class configWindow extends javax.swing.JFrame {
             }
             if(memoryType.equals("Fixed")){
                 //this.setVisible(false);                
-                if(partitionsList.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Please, insert the correct partitions");
-                    return;
-                }else{
-                    if(memorySize>0)
-                        partitionsList.add(memorySize);
-                    mainWindow newWindow =new mainWindow(finalCode,-1,memoryType,partitionsList,cpuType,quantum,Integer.parseInt(txtMemory.getText()),Integer.parseInt(txtHDDSize.getText()));
-                    newWindow.setVisible(true);
-                    this.dispose();
+                try{
+                    int partitionSize = Integer.parseInt(txtPartition.getText().trim());
+                    if(partitionSize>0){
+                        mainWindow newWindow =new mainWindow(finalCode,partitionSize,memoryType,partitionsList,cpuType,quantum,Integer.parseInt(txtMemory.getText()),Integer.parseInt(txtHDDSize.getText()));
+                        newWindow.setVisible(true);
+                        this.dispose();
+                    }else
+                        JOptionPane.showMessageDialog(null, "Please, insert a valid partition size");
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Please, insert a valid partition size");
                 }
             }else if(memoryType.equals("Segmentation")){
                 if(segmentList.isEmpty()){
@@ -560,46 +530,6 @@ public class configWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPartitionActionPerformed
 
-    private void btnAddPartitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPartitionActionPerformed
-        if(checkMemory()){
-            String segment = txtPartition.getText().trim();
-            try{
-                int partitionSize = Integer.parseInt(segment);
-                if((memorySize-partitionSize)>=0){
-                    memorySize= memorySize-partitionSize;
-                    System.out.println(memorySize);
-                    DefaultListModel<String> model = new DefaultListModel<>();
-                    int i;
-                    for(i=0;i<partitionsList.size();i++){
-                        model.addElement("Partition "+(i+1)+" | Size-> "+partitionsList.get(i));                
-                    }
-                    model.addElement("Partition "+(i+1)+" | Size-> "+Integer.toString(partitionSize));
-                    partitionsList.add(partitionSize);
-                    listPartitions.setModel(model);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Can't add more partitions");
-                }
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Not a valid partition");
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Please, define correct sizes for the memories.");
-        }
-    }//GEN-LAST:event_btnAddPartitionActionPerformed
-
-    private void btnRemovePartitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemovePartitionActionPerformed
-        if(listPartitions.getSelectedIndex()!=-1){
-            partitionsList.remove(listPartitions.getSelectedIndex());
-            DefaultListModel<String> model = new DefaultListModel<>();
-            for(int i=0;i<partitionsList.size();i++){
-                model.addElement("Partition "+(i+1)+" | Size-> "+partitionsList.get(i));                
-            }
-            listPartitions.setModel(model);
-        }else{
-            JOptionPane.showMessageDialog(null, "No partition selected");
-        }
-    }//GEN-LAST:event_btnRemovePartitionActionPerformed
-
     private void txtQuantumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantumActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtQuantumActionPerformed
@@ -657,11 +587,9 @@ public class configWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxCPU;
     private javax.swing.JComboBox<String> boxMemory;
-    private javax.swing.JButton btnAddPartition;
     private javax.swing.JButton btnAddSegment;
     private javax.swing.JButton btnLoad;
     private javax.swing.JButton btnLoad1;
-    private javax.swing.JButton btnRemovePartition;
     private javax.swing.JButton btnRemoveSegment;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -671,7 +599,6 @@ public class configWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblBG;
     private javax.swing.JLabel lblBG1;
     private javax.swing.JLabel lblBG2;
@@ -679,7 +606,6 @@ public class configWindow extends javax.swing.JFrame {
     private javax.swing.JLabel lblBG4;
     private javax.swing.JLabel lblFile;
     private javax.swing.JLabel lblQuantum;
-    private javax.swing.JList<String> listPartitions;
     private javax.swing.JList<String> listSegments;
     private javax.swing.JPanel panelBase;
     private javax.swing.JPanel panelFixed;

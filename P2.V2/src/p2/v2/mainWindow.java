@@ -6,6 +6,7 @@
 package p2.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
@@ -45,12 +46,16 @@ public class mainWindow extends javax.swing.JFrame {
             int index2=0;
             int pageCount1=1;
             int pageCount2=1;
+            for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
+                System.out.println(i+" ---- "+Arrays.toString(memoryInfo.virtualProcesses.get(i)));
+            } 
+            
             for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
                 int weight = Integer.parseInt(memoryInfo.memoryProcesses.get(i)[1]);
                 for(int y=0;y<weight;y++){
                     
                     if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Page: "+pageCount1+" ------");
+                        memoryData.addElement("------Frame: "+pageCount1+" ------");
                         pageCount1++;
                     }                    
                     index1++;
@@ -58,7 +63,7 @@ public class mainWindow extends javax.swing.JFrame {
                 }
                 for(int k=weight;k<pageSize;k++){
                     if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Page: "+pageCount1+" ------");
+                        memoryData.addElement("------Frame: "+pageCount1+" ------");
                         pageCount1++;
                     }                    
                     index1++;
@@ -69,25 +74,79 @@ public class mainWindow extends javax.swing.JFrame {
                 int weight = Integer.parseInt(memoryInfo.virtualProcesses.get(i)[1]);
                 for(int y=0;y<weight;y++){                    
                     if((index2%pageSize)==0){                        
-                        virtualData.addElement("------Page: "+pageCount2+" ------");
+                        virtualData.addElement("------Frame: "+pageCount2+" ------");
                         pageCount2++;
                     }                    
                     index2++;
                     virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
                 }
                 for(int k=weight;k<pageSize;k++){
-                    if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Page: "+pageCount2+" ------");
+                    if((index2%pageSize)==0){                        
+                        virtualData.addElement("------Frame: "+pageCount2+" ------");
                         pageCount2++;
                     }                    
-                    index1++;
-                    memoryData.addElement(index1+". FREE SPACE");
+                    index2++;
+                    virtualData.addElement(index2+". FREE SPACE");
                 }
             }
             listMemory.setModel(memoryData);
             listVirtual.setModel(virtualData);
     }
-    
+    private void setMemoriesFixed(Data memoryInfo){
+            int index1=0;
+            int index2=0;
+            int pageCount1=1;
+            int pageCount2=1;            
+            
+            for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
+                if(memoryInfo.memoryProcesses.get(i)[1].equals("RMNG")){
+                    memoryData.addElement(memoryInfo.memoryProcesses.get(i)[0]);
+                }else{
+                    int weight = Integer.parseInt(memoryInfo.memoryProcesses.get(i)[1]);
+                    for(int y=0;y<weight;y++){                    
+                        if((index1%pageSize)==0){                        
+                            memoryData.addElement("------Partition: "+pageCount1+" ------");
+                            pageCount1++;
+                        }                    
+                        index1++;
+                        memoryData.addElement(index1+". "+memoryInfo.memoryProcesses.get(i)[0]);
+                    }
+                    for(int k=weight;k<pageSize;k++){
+                        if((index1%pageSize)==0){                        
+                            memoryData.addElement("------Partition: "+pageCount1+" ------");
+                            pageCount1++;
+                        }                    
+                        index1++;
+                        memoryData.addElement(index1+". FREE SPACE");
+                    }
+                }
+            }
+            for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
+                if(memoryInfo.virtualProcesses.get(i)[1].equals("RMNG")){
+                    virtualData.addElement(memoryInfo.virtualProcesses.get(i)[0]);
+                }else{
+                    int weight = Integer.parseInt(memoryInfo.virtualProcesses.get(i)[1]);
+                    for(int y=0;y<weight;y++){                    
+                        if((index2%pageSize)==0){                        
+                            virtualData.addElement("------Partition: "+pageCount2+" ------");
+                            pageCount2++;
+                        }                    
+                        index2++;
+                        virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
+                    }
+                    for(int k=weight;k<pageSize;k++){
+                        if((index2%pageSize)==0){                        
+                            virtualData.addElement("------Partition: "+pageCount2+" ------");
+                            pageCount2++;
+                        }                    
+                        index2++;
+                        virtualData.addElement(index2+". FREE SPACE");
+                    }
+                }
+            }
+            listMemory.setModel(memoryData);
+            listVirtual.setModel(virtualData);
+    }
     private void setMemoriesDynamic(Data memoryInfo){
             int index1=0;
             int index2=0;
@@ -124,7 +183,11 @@ public class mainWindow extends javax.swing.JFrame {
         }else if(pMemoryType.equals("Paging")){
             memoryInfo.loadMemoryPaging(code,pageSize,sizeOfMemory,memorySize,sizeOfVirtual,virtualSize);
             setMemoriesPaging(memoryInfo);
-        }        
+        }
+        else if(pMemoryType.equals("Fixed")){
+            memoryInfo.loadMemoryFixed(code,pageSize,sizeOfMemory,memorySize,sizeOfVirtual,virtualSize);
+            setMemoriesFixed(memoryInfo);
+        }
         else
             System.out.println("NO ES DINAMICO");
     }
