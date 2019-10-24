@@ -5,10 +5,14 @@
  */
 package p2.v2;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.ListModel;
 
 /**
@@ -19,7 +23,7 @@ import javax.swing.ListModel;
 public class mainWindow extends javax.swing.JFrame {
     int quantum,memorySize,virtualSize;
     String memoryType,cpuType;
-    ArrayList<Integer> partsList;List<String[]> code;
+    ArrayList<Integer> partsList;ArrayList<Integer> partsListVirtual;List<String[]> code;
     int sizeOfMemory = 0;int sizeOfVirtual=0;int pageSize;
     DefaultListModel<String> memoryData = new DefaultListModel<>();
     DefaultListModel<String> virtualData = new DefaultListModel<>();
@@ -41,58 +45,155 @@ public class mainWindow extends javax.swing.JFrame {
     public mainWindow() {
         initComponents();
     }
+    private void changeListMemColor(JList lista){
+        
+        //System.out.println("Donde pinto: "+());
+        lista.setCellRenderer(new DefaultListCellRenderer() {
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index,
+         boolean isSelected, boolean cellHasFocus) {
+            Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(indexes1.contains(index)){
+                setBackground(Color.LIGHT_GRAY);
+            }/*
+            else{
+                setBackground(Color.GRAY);
+            }*/
+            return c;
+        }
+        });  
+        lista.repaint();       
+        
+    }private void changeListVirColor(JList lista){
+        
+        //System.out.println("Donde pinto: "+());
+        lista.setCellRenderer(new DefaultListCellRenderer() {
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index,
+         boolean isSelected, boolean cellHasFocus) {
+            Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(indexes2.contains(index)){
+                setBackground(Color.LIGHT_GRAY);
+            }/*
+            else{
+                setBackground(Color.GRAY);
+            }*/
+            return c;
+        }
+        });  
+        lista.repaint();       
+        
+    }
     private void setMemoriesPaging(Data memoryInfo){
             int index1=0;
             int index2=0;
+            int tipo1=1;
+            int tipo2=1;
             int pageCount1=1;
             int pageCount2=1;
-            for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
-                System.out.println(i+" ---- "+Arrays.toString(memoryInfo.virtualProcesses.get(i)));
-            } 
-            
-            for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
+            int listSpace1=0;
+            int listSpace2=0;
+            String lastProcess1="";
+            String lastProcess2="";          
+            for(int i=0;i<memoryInfo.memoryProcesses.size();i++){
+                if(!memoryInfo.memoryProcesses.get(i)[0].equals(lastProcess1)){
+                    lastProcess1=memoryInfo.memoryProcesses.get(i)[0];
+                    pageCount1=1;
+                    if(tipo1==0){
+                        tipo1=1;
+                    }else{
+                        tipo1=0;
+                    }
+                }
                 int weight = Integer.parseInt(memoryInfo.memoryProcesses.get(i)[1]);
                 for(int y=0;y<weight;y++){
                     
                     if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Frame: "+pageCount1+" ------");
+                        memoryData.addElement("------Page: "+pageCount1+" ------");
                         pageCount1++;
+                        listSpace1++;
+                        if(tipo1==0){
+                            indexes1.add(listSpace1-1);
+                        }
                     }                    
                     index1++;
                     memoryData.addElement(index1+". "+memoryInfo.memoryProcesses.get(i)[0]);
+                    listSpace1++;
+                    if(tipo1==0){
+                        indexes1.add(listSpace1-1);
+                    }
                 }
                 for(int k=weight;k<pageSize;k++){
                     if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Frame: "+pageCount1+" ------");
+                        memoryData.addElement("------Page: "+pageCount1+" ------");
                         pageCount1++;
+                        listSpace1++;
+                        if(tipo1==0){
+                            indexes1.add(listSpace1-1);
+                        }
                     }                    
                     index1++;
                     memoryData.addElement(index1+". FREE SPACE");
-                }
+                    listSpace1++;
+                    if(tipo1==0){
+                        indexes1.add(listSpace1-1);
+                    }
+                }                
             }
-            for(int i=0;i<memoryInfo.virtualProcesses.size();i++){                
+            for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
+                if(!memoryInfo.virtualProcesses.get(i)[0].equals(lastProcess2)){
+                    lastProcess2=memoryInfo.virtualProcesses.get(i)[0];
+                    pageCount2=1;
+                    if(tipo2==0){
+                        tipo2=1;
+                    }else{
+                        tipo2=0;
+                    }
+                }                
                 int weight = Integer.parseInt(memoryInfo.virtualProcesses.get(i)[1]);
                 for(int y=0;y<weight;y++){                    
                     if((index2%pageSize)==0){                        
-                        virtualData.addElement("------Frame: "+pageCount2+" ------");
+                        virtualData.addElement("------Page: "+pageCount2+" ------");
                         pageCount2++;
+                        listSpace2++;
+                        if(tipo2==0){
+                            indexes2.add(listSpace2-1);
+                        }
                     }                    
                     index2++;
                     virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
+                    listSpace2++;
+                    if(tipo2==0){
+                        indexes2.add(listSpace2-1);
+                    }
                 }
                 for(int k=weight;k<pageSize;k++){
                     if((index2%pageSize)==0){                        
-                        virtualData.addElement("------Frame: "+pageCount2+" ------");
+                        virtualData.addElement("------Page: "+pageCount2+" ------");
                         pageCount2++;
+                        listSpace2++;
+                        if(tipo2==0){
+                            indexes2.add(listSpace2-1);
+                        }
                     }                    
                     index2++;
                     virtualData.addElement(index2+". FREE SPACE");
+                    listSpace2++;
+                    if(tipo2==0){
+                        indexes2.add(listSpace2-1);
+                    }
                 }
             }
+            changeListMemColor(listMemory);
+            changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
             listVirtual.setModel(virtualData);
     }
     private void setMemoriesFixed(Data memoryInfo){
+            int tipo1=0;
+            int tipo2=0;
+            int listSpace1=0;
+            int listSpace2=0;
             int index1=0;
             int index2=0;
             int pageCount1=1;
@@ -101,38 +202,66 @@ public class mainWindow extends javax.swing.JFrame {
             for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
                 if(memoryInfo.memoryProcesses.get(i)[1].equals("RMNG")){
                     memoryData.addElement(memoryInfo.memoryProcesses.get(i)[0]);
+                    listSpace1++;
+                    if(tipo1==1){
+                        indexes1.add(listSpace1-1);
+                    } 
                 }else{
                     int weight = Integer.parseInt(memoryInfo.memoryProcesses.get(i)[1]);
                     for(int y=0;y<weight;y++){                    
                         if((index1%pageSize)==0){                        
                             memoryData.addElement("------Partition: "+pageCount1+" ------");
+                            listSpace1++;
                             pageCount1++;
                         }                    
                         index1++;
+                        listSpace1++;
                         memoryData.addElement(index1+". "+memoryInfo.memoryProcesses.get(i)[0]);
+                        if(tipo1==0){
+                            indexes1.add(listSpace1-1);
+                        } 
                     }
                     for(int k=weight;k<pageSize;k++){
                         if((index1%pageSize)==0){                        
                             memoryData.addElement("------Partition: "+pageCount1+" ------");
+                            listSpace1++;                            
                             pageCount1++;
                         }                    
                         index1++;
+                        listSpace1++;
                         memoryData.addElement(index1+". FREE SPACE");
+                        if(tipo1==0){
+                            indexes1.add(listSpace1-1);
+                        } 
                     }
+                    if(tipo1==0){
+                        tipo1=1;
+                    }else{
+                        tipo1=0;
+                    }  
                 }
             }
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
                 if(memoryInfo.virtualProcesses.get(i)[1].equals("RMNG")){
                     virtualData.addElement(memoryInfo.virtualProcesses.get(i)[0]);
+                    listSpace2++;
+                    if(tipo2==1){
+                        indexes2.add(listSpace2-1);
+                    } 
                 }else{
                     int weight = Integer.parseInt(memoryInfo.virtualProcesses.get(i)[1]);
                     for(int y=0;y<weight;y++){                    
                         if((index2%pageSize)==0){                        
                             virtualData.addElement("------Partition: "+pageCount2+" ------");
                             pageCount2++;
+                            listSpace2++;
                         }                    
                         index2++;
+                        listSpace2++;
                         virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
+                        if(tipo2==0){
+                            indexes2.add(listSpace2);
+                        }
                     }
                     for(int k=weight;k<pageSize;k++){
                         if((index2%pageSize)==0){                        
@@ -140,39 +269,185 @@ public class mainWindow extends javax.swing.JFrame {
                             pageCount2++;
                         }                    
                         index2++;
+                        listSpace2++;
                         virtualData.addElement(index2+". FREE SPACE");
+                        if(tipo2==0){
+                            indexes2.add(listSpace2);
+                        }
                     }
+                    if(tipo2==0){
+                        tipo2=1;
+                    }else{
+                        tipo2=0;
+                    }  
                 }
             }
+            changeListMemColor(listMemory);
+            changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
             listVirtual.setModel(virtualData);
     }
+    ArrayList<Integer> indexes1 = new ArrayList<>();
+    ArrayList<Integer> indexes2 = new ArrayList<>();
     private void setMemoriesDynamic(Data memoryInfo){
             int index1=0;
             int index2=0;
+            int tipo1=0;
+            int tipo2=0;
+            
             
             for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
                 int weight = Integer.parseInt(memoryInfo.memoryProcesses.get(i)[1]);
-                for(int y=0;y<weight;y++){
-                    
+                for(int y=0;y<weight;y++){                    
                     index1++;
                     memoryData.addElement(index1+". "+memoryInfo.memoryProcesses.get(i)[0]);
+                    if(tipo1==0){
+                        indexes1.add(index1-1);
+                    } 
                 }
+                if(tipo1==0){
+                    tipo1=1;
+                }else{
+                    tipo1=0;
+                }                
             }
+            changeListMemColor(listMemory);
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){                
                 int weight = Integer.parseInt(memoryInfo.virtualProcesses.get(i)[1]);
                 for(int y=0;y<weight;y++){                    
                     index2++;
                     virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
+                    if(tipo2==0){
+                        indexes2.add(index2-1);
+                    } 
+                }
+                if(tipo2==0){
+                    tipo2=1;
+                }else{
+                    tipo2=0;
                 }
             }
+            changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
             listVirtual.setModel(virtualData);
     }
-    
+    private ArrayList<Integer> segmentsMemoryMain= new ArrayList<>();
+    private ArrayList<Integer> segmentsVirtualMain= new ArrayList<>();
+    private void setMemorySegments(Data memoryInfo,ArrayList<Integer> pPartsList,ArrayList<Integer> pPartsListVirtual){
+        int index1=0;
+        int index2=0;     
+        int tipo1=0;
+        int tipo2=0;
+        int listSpace1=0;
+        int listSpace2=0;
+        ArrayList<String[]> memory = memoryInfo.segmentedMemory;
+        ArrayList<String[]> virtual = memoryInfo.segmentedVirtual;        
+        int inicio=0;
+        for(int i=0;i<segmentsMemoryMain.size();i++){
+            memoryData.addElement("-----Segment "+(i+1)+"-----");  
+            listSpace1++;
+            if(tipo1==0){
+                indexes1.add(listSpace1-1);
+            } 
+            if(i>=memoryInfo.usedMemorySegs){                
+                break;
+            }else{
+                int counter=0;
+                int procesos=0;
+                for(int k=0;k<memory.size();k++){                    
+                    
+                    if(counter>=segmentsMemoryMain.get(i)){
+                        //System.out.println("Entra");                        
+                        inicio+=procesos;                                                
+                        break;
+                    }
+                    procesos++;                    
+                    int weight=Integer.parseInt(memory.get(k)[1]);                    
+                    if(weight==0){
+                        counter+=segmentsMemoryMain.get(i);
+                    }
+                    counter+=weight;
+                    //System.out.println("Counter: "+counter);
+                    for(int j=0;j<weight;j++){
+                        index1++;
+                        listSpace1++;
+                        memoryData.addElement(index1+". "+memory.get(k)[0]);
+                        if(tipo1==0){
+                            indexes1.add(listSpace1-1);
+                        } 
+                    }                    
+                }
+                for(int w=memorySize;w>=0;w--){
+                    if(w==(procesos-1)){
+                        memory.remove(w);
+                        procesos--;
+                    }
+                }
+            }
+            if(tipo1==0){
+                tipo1=1;
+            }else{
+                tipo1=0;
+            }
+        }
+        for(int i=0;i<segmentsVirtualMain.size();i++){
+            virtualData.addElement("-----Segment "+(i+1)+"-----");
+            listSpace2++;
+            if(tipo2==0){
+                indexes2.add(listSpace2-1);
+            } 
+            if(i>=memoryInfo.usedMemorySegs){                
+                break;
+            }else{
+                int counter=0;
+                int procesos=0;
+                for(int k=0;k<virtual.size();k++){                    
+                    
+                    if(counter>=segmentsVirtualMain.get(i)){
+                        //System.out.println("Entra");                        
+                        inicio+=procesos;                                                
+                        break;
+                    }
+                    procesos++; 
+                    
+                    int weight=Integer.parseInt(virtual.get(k)[1]);
+                    if(weight==0){
+                        counter+=segmentsVirtualMain.get(i);
+                    }
+                    
+                    counter+=weight;
+                    //System.out.println("Counter: "+counter);
+                    for(int j=0;j<weight;j++){
+                        index2++;
+                        listSpace2++;
+                        virtualData.addElement(index2+". "+virtual.get(k)[0]);
+                        if(tipo2==0){
+                            indexes2.add(listSpace2-1);
+                        } 
+                    }                    
+                }
+                for(int w=virtualSize;w>=0;w--){
+                    if(w==(procesos-1)){
+                        virtual.remove(w);
+                        procesos--;
+                    }
+                }
+            }
+            if(tipo2==0){
+                tipo2=1;
+            }else{
+                tipo2=0;
+            }            
+        }
+        changeListMemColor(listMemory);
+        changeListVirColor(listVirtual);
+        listMemory.setModel(memoryData);
+        listVirtual.setModel(virtualData);
+    }
     public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
         initComponents();
         code=pCode;memoryType=pMemoryType;partsList=pPartsList;cpuType=pCpuType;quantum= pQuantum;memorySize=pMemorySize;virtualSize=pVirtualSize;
+        
         pageSize=pPageSize;
         loadProcesses();
         Data memoryInfo = new Data();
@@ -192,6 +467,20 @@ public class mainWindow extends javax.swing.JFrame {
             System.out.println("NO ES DINAMICO");
     }
     
+    public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,ArrayList<Integer> pPartsListVirtual,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
+        initComponents();
+        code=pCode;memoryType=pMemoryType;partsList=pPartsList;partsListVirtual=pPartsListVirtual;
+        cpuType=pCpuType;quantum= pQuantum;memorySize=pMemorySize;virtualSize=pVirtualSize;
+        pageSize=pPageSize;
+        segmentsMemoryMain = pPartsList;
+        segmentsVirtualMain = pPartsListVirtual;
+        
+        loadProcesses();
+        Data memoryInfo = new Data();        
+        memoryInfo.loadMemorySegments(code,pageSize,sizeOfMemory,memorySize,partsList,partsListVirtual);
+        
+        setMemorySegments(memoryInfo,pPartsList,pPartsListVirtual);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -216,17 +505,16 @@ public class mainWindow extends javax.swing.JFrame {
         lblBG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Memory");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 20, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
 
         jScrollPane2.setViewportView(listMemory);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 60, 140, 220));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 250, 220));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -235,16 +523,16 @@ public class mainWindow extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(listVirtual);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 140, 220));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 60, 250, 220));
 
         jScrollPane1.setViewportView(listProcesses);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, 140, 220));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 250, 220));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Processes");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 150, -1));
 
         btnReset.setBackground(new java.awt.Color(255, 102, 102));
         btnReset.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

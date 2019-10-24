@@ -54,7 +54,16 @@ public class configWindow extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listSegments = new javax.swing.JList<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        btnRemoveSegment1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listSegmentVirtual = new javax.swing.JList<>();
+        txtSegmentVirtual = new javax.swing.JTextField();
+        btnAddSegment1 = new javax.swing.JButton();
         txtSegment = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel4 = new javax.swing.JLabel();
         btnRemoveSegment = new javax.swing.JButton();
         btnAddSegment = new javax.swing.JButton();
         lblBG2 = new javax.swing.JLabel();
@@ -125,12 +134,57 @@ public class configWindow extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Segment size");
-        panelSegmentation.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, -1, -1));
+        panelSegmentation.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
 
         listSegments.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(listSegments);
 
-        panelSegmentation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 210, 130));
+        panelSegmentation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 160, 130));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(114, 137, 218));
+        jLabel9.setText("Virtual memory segments");
+        panelSegmentation.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Segment size");
+        panelSegmentation.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, -1, -1));
+
+        btnRemoveSegment1.setBackground(new java.awt.Color(114, 137, 218));
+        btnRemoveSegment1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRemoveSegment1.setForeground(new java.awt.Color(255, 255, 255));
+        btnRemoveSegment1.setText("Remove segment");
+        btnRemoveSegment1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveSegment1ActionPerformed(evt);
+            }
+        });
+        panelSegmentation.add(btnRemoveSegment1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 50, 160, 30));
+
+        listSegmentVirtual.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jScrollPane2.setViewportView(listSegmentVirtual);
+
+        panelSegmentation.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 90, 160, 130));
+
+        txtSegmentVirtual.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtSegmentVirtual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSegmentVirtualActionPerformed(evt);
+            }
+        });
+        panelSegmentation.add(txtSegmentVirtual, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 160, 30));
+
+        btnAddSegment1.setBackground(new java.awt.Color(114, 137, 218));
+        btnAddSegment1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAddSegment1.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddSegment1.setText("New segment");
+        btnAddSegment1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSegment1ActionPerformed(evt);
+            }
+        });
+        panelSegmentation.add(btnAddSegment1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 160, 30));
 
         txtSegment.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtSegment.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +192,15 @@ public class configWindow extends javax.swing.JFrame {
                 txtSegmentActionPerformed(evt);
             }
         });
-        panelSegmentation.add(txtSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 160, 30));
+        panelSegmentation.add(txtSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 160, 30));
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        panelSegmentation.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 10, 210));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(114, 137, 218));
+        jLabel4.setText("Main memory segments");
+        panelSegmentation.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
 
         btnRemoveSegment.setBackground(new java.awt.Color(114, 137, 218));
         btnRemoveSegment.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -149,7 +211,7 @@ public class configWindow extends javax.swing.JFrame {
                 btnRemoveSegmentActionPerformed(evt);
             }
         });
-        panelSegmentation.add(btnRemoveSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, 160, 30));
+        panelSegmentation.add(btnRemoveSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 160, 30));
 
         btnAddSegment.setBackground(new java.awt.Color(114, 137, 218));
         btnAddSegment.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -160,7 +222,7 @@ public class configWindow extends javax.swing.JFrame {
                 btnAddSegmentActionPerformed(evt);
             }
         });
-        panelSegmentation.add(btnAddSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 160, 30));
+        panelSegmentation.add(btnAddSegment, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 160, 30));
 
         lblBG2.setBackground(new java.awt.Color(44, 47, 51));
         lblBG2.setOpaque(true);
@@ -344,11 +406,19 @@ public class configWindow extends javax.swing.JFrame {
         code.clear();
         finalCode.clear();
         lblFile.setText("File: ");
-        
+        if(checkMemory()){
+            memorySize=Integer.parseInt(txtMemory.getText());
+            virtualSize = Integer.parseInt(txtHDDSize.getText());
+        }else{
+            JOptionPane.showMessageDialog(null, "Not valid memories sizes");
+            return;
+        }
         partitionsList.clear();
         segmentList.clear();
+        segmentListVirtual.clear();
         DefaultListModel<String> model = new DefaultListModel<>();        
         listSegments.setModel(model);
+        listSegmentVirtual.setModel(model);
         
         
         JFileChooser fileChooser = new JFileChooser();
@@ -403,12 +473,20 @@ public class configWindow extends javax.swing.JFrame {
                 }
             }else if(memoryType.equals("Segmentation")){
                 if(segmentList.isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Please, insert the correct partitions");
+                    JOptionPane.showMessageDialog(null, "Please, insert the correct segments of the main memory");
                     return;
-                }else{
+                }else if(segmentListVirtual.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Please, insert the correct segments of the virtual memory");
+                    return;
+                }
+                else{
                     if(memorySize>0)
                         segmentList.add(memorySize);
-                    mainWindow newWindow =new mainWindow(finalCode,-1,memoryType,partitionsList,cpuType,quantum,Integer.parseInt(txtMemory.getText()),Integer.parseInt(txtHDDSize.getText()));
+                    if(virtualSize>0)
+                        segmentListVirtual.add(virtualSize);
+                    
+                    
+                    mainWindow newWindow =new mainWindow(finalCode,-1,memoryType,segmentList,segmentListVirtual,cpuType,quantum,Integer.parseInt(txtMemory.getText()),Integer.parseInt(txtHDDSize.getText()));
                     newWindow.setVisible(true);
                     this.dispose();
                 }
@@ -463,6 +541,7 @@ public class configWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_boxMemoryActionPerformed
     ArrayList<Integer> segmentList = new ArrayList<Integer>();
+    ArrayList<Integer> segmentListVirtual = new ArrayList<Integer>();
     ArrayList<Integer> partitionsList = new ArrayList<Integer>();
     int memorySize =0;int finalMemorySize=0;
     int virtualSize =0;
@@ -493,7 +572,7 @@ public class configWindow extends javax.swing.JFrame {
                 int segmentSize = Integer.parseInt(segment);
                 if((memorySize-segmentSize)>=0){
                     memorySize= memorySize-segmentSize;
-                    System.out.println(memorySize);
+                    //System.out.println(memorySize);
                     DefaultListModel<String> model = new DefaultListModel<>();
                     int i;
                     for(i=0;i<segmentList.size();i++){
@@ -515,6 +594,8 @@ public class configWindow extends javax.swing.JFrame {
 
     private void btnRemoveSegmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSegmentActionPerformed
         if(listSegments.getSelectedIndex()!=-1){
+            int size=segmentList.get(listSegments.getSelectedIndex());
+            memorySize+=size;
             segmentList.remove(listSegments.getSelectedIndex());
             DefaultListModel<String> model = new DefaultListModel<>();
             for(int i=0;i<segmentList.size();i++){
@@ -548,6 +629,52 @@ public class configWindow extends javax.swing.JFrame {
     private void txtPageSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPageSizeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPageSizeActionPerformed
+
+    private void btnRemoveSegment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSegment1ActionPerformed
+        int size=segmentList.get(listSegments.getSelectedIndex());
+        memorySize+=size;
+        if(listSegmentVirtual.getSelectedIndex()!=-1){
+            segmentListVirtual.remove(listSegmentVirtual.getSelectedIndex());
+            DefaultListModel<String> model = new DefaultListModel<>();
+            for(int i=0;i<segmentListVirtual.size();i++){
+                model.addElement("Segment "+(i+1)+" | Size-> "+segmentListVirtual.get(i));                
+            }
+            listSegmentVirtual.setModel(model);
+        }else{
+            JOptionPane.showMessageDialog(null, "No segment selected");
+        }
+    }//GEN-LAST:event_btnRemoveSegment1ActionPerformed
+
+    private void txtSegmentVirtualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSegmentVirtualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSegmentVirtualActionPerformed
+
+    private void btnAddSegment1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSegment1ActionPerformed
+        if(checkMemory()){
+            String segment = txtSegmentVirtual.getText().trim();
+            try{
+                int segmentSize = Integer.parseInt(segment);
+                if((virtualSize-segmentSize)>=0){
+                    virtualSize= virtualSize-segmentSize;
+                    //System.out.println(virtualSize);
+                    DefaultListModel<String> model = new DefaultListModel<>();
+                    int i;
+                    for(i=0;i<segmentListVirtual.size();i++){
+                        model.addElement("Segment "+(i+1)+" | Size-> "+segmentListVirtual.get(i));                
+                    }
+                    model.addElement("Segment "+(i+1)+" | Size-> "+Integer.toString(segmentSize));
+                    segmentListVirtual.add(segmentSize);
+                    listSegmentVirtual.setModel(model);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Can't add more segments");
+                }
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Not a valid segment");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Please, define correct sizes for the memories.");
+        }
+    }//GEN-LAST:event_btnAddSegment1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -588,17 +715,24 @@ public class configWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> boxCPU;
     private javax.swing.JComboBox<String> boxMemory;
     private javax.swing.JButton btnAddSegment;
+    private javax.swing.JButton btnAddSegment1;
     private javax.swing.JButton btnLoad;
     private javax.swing.JButton btnLoad1;
     private javax.swing.JButton btnRemoveSegment;
+    private javax.swing.JButton btnRemoveSegment1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblBG;
     private javax.swing.JLabel lblBG1;
     private javax.swing.JLabel lblBG2;
@@ -606,6 +740,7 @@ public class configWindow extends javax.swing.JFrame {
     private javax.swing.JLabel lblBG4;
     private javax.swing.JLabel lblFile;
     private javax.swing.JLabel lblQuantum;
+    private javax.swing.JList<String> listSegmentVirtual;
     private javax.swing.JList<String> listSegments;
     private javax.swing.JPanel panelBase;
     private javax.swing.JPanel panelFixed;
@@ -617,6 +752,7 @@ public class configWindow extends javax.swing.JFrame {
     private javax.swing.JTextField txtPartition;
     private javax.swing.JTextField txtQuantum;
     private javax.swing.JTextField txtSegment;
+    private javax.swing.JTextField txtSegmentVirtual;
     // End of variables declaration//GEN-END:variables
 
 }
