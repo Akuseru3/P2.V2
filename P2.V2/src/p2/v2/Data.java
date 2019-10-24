@@ -16,6 +16,7 @@ import java.util.List;
 public class Data {
     List<String[]> memoryProcesses = new ArrayList<>();
     List<String[]> virtualProcesses = new ArrayList<>();
+    List<Integer> unusedProcesses = new ArrayList<>();
     public void loadMemoryDynamic(List<String[]> code,int sizeOfMemory,int memorySize,int sizeOfVirtual,int virtualSize){
         
         for(int i=0;i<code.size();i++){
@@ -30,7 +31,8 @@ public class Data {
                 virtualProcesses.add(process);
             }
             else{
-                System.out.println("Proceso "+(i+1)+" no puede entrar");                
+                System.out.println("Proceso "+(i+1)+" no puede entrar");
+                unusedProcesses.add(i);
             }
         }
     }
@@ -62,7 +64,8 @@ public class Data {
                 }
             }
             else{
-                System.out.println("Proceso "+(i+1)+" no puede entrar");                
+                System.out.println("Proceso "+(i+1)+" no puede entrar");
+                unusedProcesses.add(i);
             }
             
         }
@@ -76,7 +79,7 @@ public class Data {
         }catch(Exception e){
             System.out.println("Se cayo");
             for (int j = 0; j < k; j++) {
-                String[] process1 = {"asdsa","0"};
+                String[] process1 = {"dummy","0"};
                 segmentedMemory.add(j,process1);
             }
             segmentedMemory.add(k, process);
@@ -85,7 +88,9 @@ public class Data {
     
     int usedMemorySegs =0;
     int usedVirtualSegs =0;
-    int[] segmentsVirtual;
+    public int[] segmentsMemory;
+    public int[] segmentsVirtual;
+    
     public void loadMemorySegments(List<String[]> code,int pageSize,int sizeOfMemory,int memorySize,ArrayList<Integer> memorySegments,ArrayList<Integer> virtualSegments){
         int[] segmentsMemoryFunc = new int[memorySegments.size()];
         int[] segmentsVirtualFunc = new int[virtualSegments.size()];
@@ -99,6 +104,7 @@ public class Data {
         
         for(int i=0;i<code.size();i++){            
             int flag=0;
+            int entryFlag=0;
             String[] actual = code.get(i);
             int weight = Integer.parseInt(actual[4]);
             
@@ -110,6 +116,7 @@ public class Data {
                     String[] process = {actual[0],actual[4]};
                     addProcess(k,process);                    
                     flag=1;
+                    entryFlag=1;
                     break; 
                 }
                 
@@ -121,26 +128,33 @@ public class Data {
                     
                     int actualMemorySegment= segmentsVirtualFunc[k];
                     if((actualMemorySegment-weight)>=0){
+                        
                         usedVirtualSegs+=1;
                         segmentsVirtualFunc[k] = actualMemorySegment-weight;
                         String[] process = {actual[0],actual[4]};
                         //System.out.println("Entra en segmento:"+k);
                         try{
                             segmentedVirtual.add(k, process);
+                            //flag=2;
+                            entryFlag=1;
                             break;
                         }catch(Exception e){
                             System.out.println("Se cayo");
                             for (int j = 0; j < k; j++) {
-                                String[] process1 = {"asdsa","0"};
+                                String[] process1 = {"dummy","0"};
                                 segmentedVirtual.add(j,process1);
                             }
                             segmentedVirtual.add(k, process);
+                            //flag=2;
                             break;
-                        }
-                        
+                        }                        
                     }
                 }
-            }            
+            }
+            if(entryFlag==0){
+                System.out.println("Proceso "+(i+1)+" no puede entrar");
+                unusedProcesses.add(i);
+            }
         }
         
         /*System.out.println("SegMem "+Arrays.toString(memorySegments.toArray()));
@@ -153,7 +167,9 @@ public class Data {
             //System.out.println("----------SEGM: "+(i+1));
             System.out.println("SegVir "+Arrays.toString(segmentedVirtual.get(i)));                   
         }
-              
+        System.out.println("SegsMem "+Arrays.toString(segmentsMemoryFunc));  
+        segmentsMemory = segmentsMemoryFunc;
+        segmentsVirtual = segmentsVirtualFunc;
         
     }
     public void loadMemoryPaging(List<String[]> code,int pageSize,int sizeOfMemory,int memorySize,int sizeOfVirtual,int virtualSize){
@@ -161,9 +177,9 @@ public class Data {
         for(int i=0;i<code.size();i++){
             
             ArrayList<String> pages = new ArrayList<>();
-            String[] actual = code.get(i);
-            int weight = Integer.parseInt(actual[4]);
+            String[] actual = code.get(i);            
             int pagesWeight=Integer.parseInt(actual[4]);
+            int neededPages= (int) Math.ceil(pagesWeight/pageSize);
             //System.out.println("Peso:"+pagesWeight);            
             String[] process ={"0","0"};
             process[0] = actual[0];           
@@ -187,32 +203,36 @@ public class Data {
                 
             }
             
-            if((sizeOfMemory+pageSize)<=memorySize){
+            if(sizeOfMemory+(neededPages*pageSize)<=memorySize){
                 
-                sizeOfMemory+=pageSize;
+                
                 for(int k=0;k<pages.size();k++){
+                    sizeOfMemory+=pageSize;
                     process[1]=pages.get(k);
                     String[] realProcess = {process[0],pages.get(k)};
                     memoryProcesses.add(realProcess);
                 }
                 
                                 
-            }else if((sizeOfVirtual+pageSize)<=virtualSize){
-                sizeOfVirtual+=pageSize;
+            }else if(sizeOfVirtual+(neededPages*pageSize)<=virtualSize){
+                
                 System.out.println(Arrays.toString(pages.toArray()));
                 for(int w=0;w<pages.size();w++){
+                    sizeOfVirtual+=pageSize;
                     process[1]=pages.get(w);
                     String[] realProcess = {process[0],pages.get(w)};
                     virtualProcesses.add(realProcess);
                 }
             }
             else{
-                System.out.println("Proceso "+(i+1)+" no puede entrar");                
+                System.out.println("Proceso "+(i+1)+" no puede entrar");
+                unusedProcesses.add(i);                
             }
+            System.out.println("Proceso "+(i+1)+": "+ sizeOfMemory);
             
-        }   /*
-        for(int z=0;z<forReal.size();z++){
-             System.out.println("ASASAS: "+Arrays.toString(forReal.get(z)));
-        }*/
+        }   
+        for(int z=0;z<memoryProcesses.size();z++){
+             System.out.println("ASASAS: "+Arrays.toString(memoryProcesses.get(z)));
+        }
     }
 }

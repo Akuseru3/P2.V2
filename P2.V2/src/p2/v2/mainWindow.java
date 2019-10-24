@@ -62,9 +62,31 @@ public class mainWindow extends javax.swing.JFrame {
             return c;
         }
         });  
-        lista.repaint();       
+        lista.repaint();     
         
-    }private void changeListVirColor(JList lista){
+    }
+    private void changeUnsusedColor(Data memoryData){
+        System.out.println(Arrays.toString(memoryData.unusedProcesses.toArray()));
+        //System.out.println("Donde pinto: "+());
+        listProcesses.setCellRenderer(new DefaultListCellRenderer() {
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index,
+         boolean isSelected, boolean cellHasFocus) {
+            Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(memoryData.unusedProcesses.contains(index)){
+                setBackground(Color.RED);
+                
+            }/*
+            else{
+                setBackground(Color.GRAY);
+            }*/
+            return c;
+        }
+        });  
+        listProcesses.repaint();     
+        
+    }
+    private void changeListVirColor(JList lista){
         
         //System.out.println("Donde pinto: "+());
         lista.setCellRenderer(new DefaultListCellRenderer() {
@@ -140,6 +162,9 @@ public class mainWindow extends javax.swing.JFrame {
                     }
                 }                
             }
+            if(index1!=memorySize){
+                memoryData.addElement("----- "+(memorySize-index1)+" unused spaces-----");                    
+            }
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
                 if(!memoryInfo.virtualProcesses.get(i)[0].equals(lastProcess2)){
                     lastProcess2=memoryInfo.virtualProcesses.get(i)[0];
@@ -184,6 +209,10 @@ public class mainWindow extends javax.swing.JFrame {
                     }
                 }
             }
+            if(index2!=virtualSize){
+                virtualData.addElement("----- "+(virtualSize-index2)+" unused spaces-----");                    
+            }
+            changeUnsusedColor(memoryInfo);
             changeListMemColor(listMemory);
             changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
@@ -197,7 +226,9 @@ public class mainWindow extends javax.swing.JFrame {
             int index1=0;
             int index2=0;
             int pageCount1=1;
-            int pageCount2=1;            
+            int pageCount2=1;      
+            int memoryFree=0;
+            int virtualFree=0;
             
             for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
                 if(memoryInfo.memoryProcesses.get(i)[1].equals("RMNG")){
@@ -230,6 +261,7 @@ public class mainWindow extends javax.swing.JFrame {
                         index1++;
                         listSpace1++;
                         memoryData.addElement(index1+". FREE SPACE");
+                        memoryFree+=1;
                         if(tipo1==0){
                             indexes1.add(listSpace1-1);
                         } 
@@ -240,6 +272,9 @@ public class mainWindow extends javax.swing.JFrame {
                         tipo1=0;
                     }  
                 }
+            }
+            if((index1)!=memorySize){
+                memoryData.addElement("----- "+(memorySize-(index1))+" unused spaces left-----");                    
             }
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
                 if(memoryInfo.virtualProcesses.get(i)[1].equals("RMNG")){
@@ -271,6 +306,7 @@ public class mainWindow extends javax.swing.JFrame {
                         index2++;
                         listSpace2++;
                         virtualData.addElement(index2+". FREE SPACE");
+                        virtualFree+=1;
                         if(tipo2==0){
                             indexes2.add(listSpace2);
                         }
@@ -279,9 +315,14 @@ public class mainWindow extends javax.swing.JFrame {
                         tipo2=1;
                     }else{
                         tipo2=0;
-                    }  
+                    }
+                    
                 }
             }
+            if(index2!=virtualSize){
+                virtualData.addElement("----- "+(virtualSize-index2)+" unused spaces-----");                    
+            }
+            changeUnsusedColor(memoryInfo);
             changeListMemColor(listMemory);
             changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
@@ -305,11 +346,15 @@ public class mainWindow extends javax.swing.JFrame {
                         indexes1.add(index1-1);
                     } 
                 }
+                
                 if(tipo1==0){
                     tipo1=1;
                 }else{
                     tipo1=0;
                 }                
+            }
+            if(index1!=memorySize){
+                memoryData.addElement("----- "+(memorySize-index1)+" unused spaces-----");                    
             }
             changeListMemColor(listMemory);
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){                
@@ -327,61 +372,66 @@ public class mainWindow extends javax.swing.JFrame {
                     tipo2=0;
                 }
             }
+            if(index2!=virtualSize){
+                virtualData.addElement("----- "+(virtualSize-index2)+" unused spaces-----");                    
+            }
+            
+            changeUnsusedColor(memoryInfo);
             changeListVirColor(listVirtual);
             listMemory.setModel(memoryData);
             listVirtual.setModel(virtualData);
     }
     private ArrayList<Integer> segmentsMemoryMain= new ArrayList<>();
     private ArrayList<Integer> segmentsVirtualMain= new ArrayList<>();
-    private void setMemorySegments(Data memoryInfo,ArrayList<Integer> pPartsList,ArrayList<Integer> pPartsListVirtual){
+    private void setMemorySegments(Data memoryInfo){
         int index1=0;
         int index2=0;     
         int tipo1=0;
         int tipo2=0;
         int listSpace1=0;
         int listSpace2=0;
+        
         ArrayList<String[]> memory = memoryInfo.segmentedMemory;
-        ArrayList<String[]> virtual = memoryInfo.segmentedVirtual;        
-        int inicio=0;
+        ArrayList<String[]> virtual = memoryInfo.segmentedVirtual; 
         for(int i=0;i<segmentsMemoryMain.size();i++){
-            memoryData.addElement("-----Segment "+(i+1)+"-----");  
+            memoryData.addElement("-----Segment "+(i+1)+"-----");
             listSpace1++;
             if(tipo1==0){
                 indexes1.add(listSpace1-1);
-            } 
-            if(i>=memoryInfo.usedMemorySegs){                
-                break;
-            }else{
-                int counter=0;
-                int procesos=0;
-                for(int k=0;k<memory.size();k++){                    
-                    
-                    if(counter>=segmentsMemoryMain.get(i)){
-                        //System.out.println("Entra");                        
-                        inicio+=procesos;                                                
-                        break;
-                    }
-                    procesos++;                    
-                    int weight=Integer.parseInt(memory.get(k)[1]);                    
-                    if(weight==0){
-                        counter+=segmentsMemoryMain.get(i);
-                    }
-                    counter+=weight;
-                    //System.out.println("Counter: "+counter);
+            }
+            int weights=0;
+            int usedMemorySeg = segmentsMemoryMain.get(i)-memoryInfo.segmentsMemory[i];
+            
+            int procesos=0;
+            if(usedMemorySeg!=0){
+                for(int k=0;k<memory.size();k++){                
+                    int weight=Integer.parseInt(memory.get(k)[1]);
+                    weights+=weight;
+                    procesos++;
                     for(int j=0;j<weight;j++){
                         index1++;
                         listSpace1++;
                         memoryData.addElement(index1+". "+memory.get(k)[0]);
                         if(tipo1==0){
                             indexes1.add(listSpace1-1);
-                        } 
-                    }                    
-                }
-                for(int w=memorySize;w>=0;w--){
-                    if(w==(procesos-1)){
-                        memory.remove(w);
-                        procesos--;
+                        }
                     }
+                    if(weights == usedMemorySeg){
+                        for(int w=memorySize;w>=0;w--){
+                            if(w==(procesos-1)){
+                                memory.remove(w);
+                                procesos--;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if(memoryInfo.segmentsMemory[i]!=0){
+                memoryData.addElement("----- "+(memoryInfo.segmentsMemory[i])+" unused spaces-----");
+                listSpace1++;
+                if(tipo1==0){
+                    indexes1.add(listSpace1-1);
                 }
             }
             if(tipo1==0){
@@ -395,55 +445,55 @@ public class mainWindow extends javax.swing.JFrame {
             listSpace2++;
             if(tipo2==0){
                 indexes2.add(listSpace2-1);
-            } 
-            if(i>=memoryInfo.usedMemorySegs){                
-                break;
-            }else{
-                int counter=0;
-                int procesos=0;
-                for(int k=0;k<virtual.size();k++){                    
-                    
-                    if(counter>=segmentsVirtualMain.get(i)){
-                        //System.out.println("Entra");                        
-                        inicio+=procesos;                                                
-                        break;
-                    }
-                    procesos++; 
-                    
+            }
+            int weights=0;
+            int usedVirtualSeg = segmentsVirtualMain.get(i)-memoryInfo.segmentsVirtual[i];
+                        
+            int procesos=0;
+            if(usedVirtualSeg!=0){
+                for(int k=0;k<virtual.size();k++){                
                     int weight=Integer.parseInt(virtual.get(k)[1]);
-                    if(weight==0){
-                        counter+=segmentsVirtualMain.get(i);
-                    }
-                    
-                    counter+=weight;
-                    //System.out.println("Counter: "+counter);
+                    weights+=weight;
+                    procesos++;
                     for(int j=0;j<weight;j++){
                         index2++;
                         listSpace2++;
                         virtualData.addElement(index2+". "+virtual.get(k)[0]);
                         if(tipo2==0){
                             indexes2.add(listSpace2-1);
-                        } 
-                    }                    
-                }
-                for(int w=virtualSize;w>=0;w--){
-                    if(w==(procesos-1)){
-                        virtual.remove(w);
-                        procesos--;
+                        }
                     }
+                    if(weights == usedVirtualSeg){
+                        for(int w=memorySize;w>=0;w--){
+                            if(w==(procesos-1)){
+                                virtual.remove(w);
+                                procesos--;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if(memoryInfo.segmentsVirtual[i]!=0){
+                virtualData.addElement("----- "+(memoryInfo.segmentsVirtual[i])+" unused spaces-----");
+                listSpace2++;
+                if(tipo2==0){
+                    indexes2.add(listSpace2-1);
                 }
             }
             if(tipo2==0){
                 tipo2=1;
             }else{
                 tipo2=0;
-            }            
+            }
         }
+        changeUnsusedColor(memoryInfo);
         changeListMemColor(listMemory);
         changeListVirColor(listVirtual);
         listMemory.setModel(memoryData);
         listVirtual.setModel(virtualData);
     }
+    
     public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
         initComponents();
         code=pCode;memoryType=pMemoryType;partsList=pPartsList;cpuType=pCpuType;quantum= pQuantum;memorySize=pMemorySize;virtualSize=pVirtualSize;
@@ -479,7 +529,7 @@ public class mainWindow extends javax.swing.JFrame {
         Data memoryInfo = new Data();        
         memoryInfo.loadMemorySegments(code,pageSize,sizeOfMemory,memorySize,partsList,partsListVirtual);
         
-        setMemorySegments(memoryInfo,pPartsList,pPartsListVirtual);
+        setMemorySegments(memoryInfo);
     }
     /**
      * This method is called from within the constructor to initialize the form.
