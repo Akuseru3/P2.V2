@@ -17,8 +17,9 @@ public class Data {
     List<String[]> memoryProcesses = new ArrayList<>();
     List<String[]> virtualProcesses = new ArrayList<>();
     List<Integer> unusedProcesses = new ArrayList<>();
+    ArrayList<Processs> core1Procs = new ArrayList<Processs>();
+    ArrayList<Processs> core2Procs = new ArrayList<Processs>();
     public void loadMemoryDynamic(List<String[]> code,int sizeOfMemory,int memorySize,int sizeOfVirtual,int virtualSize){
-        
         for(int i=0;i<code.size();i++){
             String[] actual = code.get(i);
             int weight = Integer.parseInt(actual[4]);

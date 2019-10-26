@@ -12,10 +12,12 @@ import java.util.ArrayList;
  * @author Kevin
  */
 public class CpuAlgorithms {
-    public int[][] tabla = new int[6][70];
+    public int[][] tabla = new int[6][80];
+    public ArrayList<ProcessResult> results;
     CpuAlgorithms(){
+        results = new ArrayList<ProcessResult>();
         for(int i = 0; i<6; i++){
-            for(int j = 0; j<70; j++){
+            for(int j = 0; j<80; j++){
                 tabla[i][j] = 0;
             }
         }
@@ -39,6 +41,7 @@ public class CpuAlgorithms {
                 enEjec.get(0).actTime -= 1;
                 actQuantum -= 1;
                 if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                     actQuantum = quantum;
                 }
@@ -76,6 +79,7 @@ public class CpuAlgorithms {
                 enEjec.get(0).actTime -= 1;
                 actQuantum -= 1;
                 if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                     actQuantum = quantum;
                 }
@@ -94,6 +98,7 @@ public class CpuAlgorithms {
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
             }
@@ -137,9 +142,106 @@ public class CpuAlgorithms {
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
             }  
         }
+    }
+    public void Priority_Alg(ArrayList<Processs> cargados){
+        ArrayList<Processs> enEjec = new ArrayList<Processs>();
+        for(int j = 0; j<cargados.size();j++){
+            if(cargados.get(j).arrivTime==0){
+                enEjec = priorityArrange(enEjec,cargados.get(j));
+            }
+        }
+        for(int i = 0;i<21;i++){
+            if(enEjec.size()!=0){
+                tabla[enEjec.get(0).corePos][i] = 1;
+                enEjec.get(0).actTime -= 1;
+                if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    enEjec.remove(0);
+                }
+            }
+            //poner este if arriba dependiendo de lo que diga el prof
+            for(int j = 0; j<cargados.size();j++){
+                if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
+                    enEjec = priorityArrange(enEjec,cargados.get(j));
+                }
+            }
+        }
+        
+    }
+    public ArrayList<Processs> priorityArrange(ArrayList<Processs> executed, Processs newProces){
+        if(executed.size() == 0){
+            executed.add(newProces);
+        }
+        else{
+            for(int i = 0; i<executed.size();i++){
+                if(newProces.priority < executed.get(i).priority){
+                    executed.add(i, newProces);
+                    return executed;
+                }
+            }
+            executed.add(newProces);
+        }
+        return executed;
+    }
+    
+    public void HRRN_Alg(ArrayList<Processs> cargados){
+        ArrayList<Processs> enEjec = new ArrayList<Processs>();
+        for(int j = 0; j<cargados.size();j++){
+            if(cargados.get(j).arrivTime==0){
+                enEjec = priorityArrange(enEjec,cargados.get(j));
+            }
+        }
+        for(int i = 0;i<21;i++){
+            if(enEjec.size()!=0){
+                tabla[enEjec.get(0).corePos][i] = 1;
+                enEjec.get(0).actTime -= 1;
+                if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    enEjec.remove(0);
+                    enEjec = hrrnArrange(enEjec,i+1);
+                }
+            }
+            //poner este if arriba dependiendo de lo que diga el prof
+            for(int j = 0; j<cargados.size();j++){
+                if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
+                    enEjec.add(cargados.get(j));
+                }
+            }
+        }
+    }
+    public ArrayList<Processs> hrrnArrange(ArrayList<Processs> executed,int actTime){
+        ArrayList<Processs> newList = new ArrayList<Processs>();
+        for(int j = 0; j<executed.size(); j++){
+            Processs newProces = executed.get(j);
+            if(newList.size() == 0){
+                newList.add(newProces);
+            }
+            else{
+                for(int i = 0; i<newList.size();i++){
+                    float npHRRN = (((float)actTime - (float)newProces.arrivTime)+(float)newProces.servTime)/(float)newProces.servTime;
+                    float lastHRRN = (((float)actTime - (float)newList.get(i).arrivTime)+(float)newList.get(i).servTime)/(float)newList.get(i).servTime;
+                    System.out.println(actTime);
+                    System.out.println("Primero; "+newProces.name);
+                    System.out.println("Segundo; "+newList.get(i).name);
+                    System.out.println(npHRRN);
+                    System.out.println(lastHRRN);
+                    System.out.println("-----------");
+                    if(npHRRN > lastHRRN){
+                        newList.add(i, newProces);
+                        break;
+                    }
+                    else if(i == newList.size()-1){
+                        newList.add(newProces);
+                        break;
+                    }
+                }
+            }
+        }
+        return newList;
     }
 }
