@@ -111,7 +111,7 @@ public class configWindow extends javax.swing.JFrame {
         getContentPane().add(lblQuantum, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 490, -1, -1));
 
         boxCPU.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        boxCPU.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Feedback", "HRRN", "Prioritary" }));
+        boxCPU.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Feedback", "HRRN", "Prioritary", "WAF" }));
         boxCPU.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boxCPUActionPerformed(evt);

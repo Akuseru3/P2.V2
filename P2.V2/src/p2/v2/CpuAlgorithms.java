@@ -30,7 +30,7 @@ public class CpuAlgorithms {
             }
         }
         int actQuantum = quantum;
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             for(int j = 0; j<cargados.size();j++){
                 if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
                     enEjec.add(1,cargados.get(j));
@@ -41,7 +41,7 @@ public class CpuAlgorithms {
                 enEjec.get(0).actTime -= 1;
                 actQuantum -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                     actQuantum = quantum;
                 }
@@ -62,7 +62,7 @@ public class CpuAlgorithms {
             }
         }
         int actQuantum = quantum;
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             for(int j = 0; j<cargados.size();j++){
                 if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
                     enEjec.add(cargados.get(j));
@@ -79,7 +79,7 @@ public class CpuAlgorithms {
                 enEjec.get(0).actTime -= 1;
                 actQuantum -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                     actQuantum = quantum;
                 }
@@ -93,12 +93,12 @@ public class CpuAlgorithms {
                 enEjec.add(cargados.get(j));
             }
         }
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             if(enEjec.size()!=0){
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
             }
@@ -132,7 +132,7 @@ public class CpuAlgorithms {
                 enEjec.add(cargados.get(j));
             }
         }
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             for(int j = 0; j<cargados.size();j++){
                 if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
                     enEjec.add(cargados.get(j));
@@ -142,11 +142,12 @@ public class CpuAlgorithms {
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
             }  
         }
+        
     }
     public void Priority_Alg(ArrayList<Processs> cargados){
         ArrayList<Processs> enEjec = new ArrayList<Processs>();
@@ -155,12 +156,12 @@ public class CpuAlgorithms {
                 enEjec = priorityArrange(enEjec,cargados.get(j));
             }
         }
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             if(enEjec.size()!=0){
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
             }
@@ -193,15 +194,15 @@ public class CpuAlgorithms {
         ArrayList<Processs> enEjec = new ArrayList<Processs>();
         for(int j = 0; j<cargados.size();j++){
             if(cargados.get(j).arrivTime==0){
-                enEjec = priorityArrange(enEjec,cargados.get(j));
+                enEjec.add(cargados.get(j));
             }
         }
-        for(int i = 0;i<21;i++){
+        for(int i = 0;i<80;i++){
             if(enEjec.size()!=0){
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
                 if(enEjec.get(0).actTime == 0){
-                    results.add(new ProcessResult(i,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                     enEjec = hrrnArrange(enEjec,i+1);
                 }
@@ -243,5 +244,64 @@ public class CpuAlgorithms {
             }
         }
         return newList;
+    }
+    public void WAF_Alg(ArrayList<Processs> cargados){
+        ArrayList<Processs> enEjec = new ArrayList<Processs>();
+        ArrayList<Processs> enEjecLenta = new ArrayList<Processs>();
+        int actQuantum = 0;
+        for(int j = 0; j<cargados.size();j++){
+            if(cargados.get(j).arrivTime==0){
+                if(cargados.get(j).servTime>10){
+                    enEjecLenta.add(cargados.get(j));
+                }
+                else{
+                    enEjec.add(cargados.get(j));
+                }    
+            }
+        }
+        for(int i = 0;i<80;i++){
+            if(actQuantum == 0){
+                if(enEjec.size()!=0){
+                    Processs toChange = enEjec.get(0);
+                    enEjec.remove(0);
+                    enEjec.add(toChange);
+                    actQuantum = enEjec.get(0).servTime - (enEjec.get(0).servTime/2);
+                }
+                else{
+                    actQuantum = 1;
+                }
+            }
+            if(enEjec.size()!=0){
+                tabla[enEjec.get(0).corePos][i] = 1;
+                enEjec.get(0).actTime -= 1;
+                actQuantum -= 1;
+                if(enEjec.get(0).actTime == 0){
+                    results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
+                    enEjec.remove(0);
+                    if(enEjec.size()!=0){
+                        actQuantum = enEjec.get(0).servTime - (enEjec.get(0).servTime/2);
+                    }
+                }
+            }
+            else if(enEjecLenta.size()!=0){
+                tabla[enEjecLenta.get(0).corePos][i] = 1;
+                enEjecLenta.get(0).actTime -= 1;
+                actQuantum -= 1;
+                if(enEjecLenta.get(0).actTime == 0){
+                    results.add(new ProcessResult(i+1,enEjecLenta.get(0).arrivTime,enEjecLenta.get(0).servTime,enEjecLenta.get(0).corePos));
+                    enEjecLenta.remove(0);
+                }
+            }
+            for(int j = 0; j<cargados.size();j++){
+                if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
+                    if(cargados.get(j).servTime>10){
+                        enEjecLenta.add(cargados.get(j));
+                    }
+                    else{
+                        enEjec.add(cargados.get(j));
+                    }
+                }
+            }
+        }
     }
 }

@@ -33,6 +33,8 @@ public class mainWindow extends javax.swing.JFrame {
     int sizeOfMemory = 0;int sizeOfVirtual=0;int pageSize;
     DefaultListModel<String> memoryData = new DefaultListModel<>();
     DefaultListModel<String> virtualData = new DefaultListModel<>();
+    Nucleo nucleo1;
+    Nucleo nucleo2;
     /**
      * Creates new form mainWindow
      */
@@ -511,21 +513,7 @@ public class mainWindow extends javax.swing.JFrame {
         JTableHeader head2 = jTable2.getTableHeader();
         jTable2.getColumnModel().getColumn(0).setMinWidth(70);
         jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        head2.setFont(new Font("Segoe UI",Font.PLAIN,10));
-        Processs p1 = new Processs("p1",3,0,3,150,0);
-        Processs p2 = new Processs("p2",6,1,1,150,1);
-        Processs p3 = new Processs("p3",4,3,1,150,2);
-        Processs p4 = new Processs("p4",5,7,5,150,3);
-        Processs p5 = new Processs("p5",2,10,2,150,4);
-
-        cargados = new ArrayList<Processs>();
-        cargados.add(p1);
-        cargados.add(p2);
-        cargados.add(p3);
-        cargados.add(p4);
-        cargados.add(p5);
-        
-        
+        head2.setFont(new Font("Segoe UI",Font.PLAIN,10)); 
         code=pCode;memoryType=pMemoryType;partsList=pPartsList;cpuType=pCpuType;quantum= pQuantum;memorySize=pMemorySize;virtualSize=pVirtualSize;
         
         pageSize=pPageSize;
@@ -546,11 +534,11 @@ public class mainWindow extends javax.swing.JFrame {
         else{
             System.out.println("NO ES DINAMICO");
         }
+        nucleo1 = new Nucleo(pCpuType,memoryInfo.core1Procs,pQuantum);
+        nucleo2 = new Nucleo(pCpuType,memoryInfo.core2Procs,pQuantum);
         startN1();
     }
-    ArrayList<Processs> cargados;
-    int[][] coreTable;
-    ArrayList<ProcessResult> results;
+
     public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,ArrayList<Integer> pPartsListVirtual,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
         initComponents();
         code=pCode;memoryType=pMemoryType;partsList=pPartsList;partsListVirtual=pPartsListVirtual;
@@ -568,23 +556,21 @@ public class mainWindow extends javax.swing.JFrame {
     
     public void startN1(){
         DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-        for(int i = 0; i<cargados.size();i++){
-            model.setValueAt(cargados.get(i).name, i, 0);
+        for(int i = 0; i<nucleo1.cargados.size();i++){
+            model.setValueAt(nucleo1.cargados.get(i).name, i, 0);
         }
         DefaultTableModel modelStats = (DefaultTableModel)jTable3.getModel();
-        for(int i = 0; i<cargados.size();i++){
-            modelStats.setValueAt(cargados.get(i).name, 0, i+1);
+        for(int i = 0; i<nucleo1.cargados.size();i++){
+            modelStats.setValueAt(nucleo1.cargados.get(i).name, 0, i+1);
         }
-        CpuAlgorithms algs = new CpuAlgorithms();
-        algs.HRRN_Alg(cargados);
-        coreTable = algs.tabla;
-        results = algs.results;
         Thread t = new Thread(){
             public void run(){
+                System.out.println(nucleo1.results.size());
                 int cont = 0;
+                System.out.println("");
                 for(int i = 0; i<80;i++){
-                    for(int j = 0; j<results.size();j++){
-                        ProcessResult result = results.get(j);
+                    for(int j = 0; j<nucleo1.results.size();j++){
+                        ProcessResult result = nucleo1.results.get(j);
                         if(result.finalTime+2 == i){
                             DefaultTableModel modelStats = (DefaultTableModel)jTable3.getModel();
                             modelStats.setValueAt(result.finalTime, 1, result.tablePosition+1);
@@ -599,7 +585,7 @@ public class mainWindow extends javax.swing.JFrame {
                             @Override
                             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
                                 JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-                                if(coreTable[row][col-1] == 1){
+                                if(nucleo1.coreTable[row][col-1] == 1){
                                     l.setBackground(Color.decode("#4169E1"));
                                 }
                                 else{
@@ -614,20 +600,20 @@ public class mainWindow extends javax.swing.JFrame {
                     while(System.currentTimeMillis()-initTime<1000){
                         
                     }
-                    if(cont>=results.size()){
+                    if(cont>=nucleo1.results.size()){
                         
-                        System.out.println("salida a mano en momento ->"+i);
+                        System.out.println("salida a mano en momento ->"+i+"---Con contador:"+cont);
                         break;
                     }
                 }
                 float avgTr = 0;
                 float avgTDS = 0; 
-                for(int j = 0; j<results.size();j++){
-                    avgTr += results.get(j).turnAround;
-                    avgTDS += results.get(j).turndService;
+                for(int j = 0; j<nucleo1.results.size();j++){
+                    avgTr += nucleo1.results.get(j).turnAround;
+                    avgTDS += nucleo1.results.get(j).turndService;
                 }
-                avgTr = avgTr/results.size();
-                avgTDS = avgTDS/results.size();
+                avgTr = avgTr/nucleo1.results.size();
+                avgTDS = avgTDS/nucleo1.results.size();
                 avgTr = (float)Math.round(avgTr*100.0)/100;
                 avgTDS = (float)Math.round(avgTDS*100.0)/100;
                 DefaultTableModel modelStats = (DefaultTableModel)jTable3.getModel();

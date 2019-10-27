@@ -8,6 +8,7 @@ package p2.v2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -19,6 +20,25 @@ public class Data {
     List<Integer> unusedProcesses = new ArrayList<>();
     ArrayList<Processs> core1Procs = new ArrayList<Processs>();
     ArrayList<Processs> core2Procs = new ArrayList<Processs>();
+    
+    public void addToCore(String[] inMemProc){
+        Random rand = new Random();
+        int n = rand.nextInt(2);
+        n+=1;
+        n=1;
+        if(n == 1){
+            if(core1Procs.size() != 6){
+                Processs newProc = new Processs(inMemProc[0],Integer.parseInt(inMemProc[1]),Integer.parseInt(inMemProc[2]),Integer.parseInt(inMemProc[3]),Integer.parseInt(inMemProc[4]),core1Procs.size());
+                core1Procs.add(newProc);
+            }
+        }
+        else{
+            if(core2Procs.size() != 6){
+                Processs newProc = new Processs(inMemProc[0],Integer.parseInt(inMemProc[1]),Integer.parseInt(inMemProc[2]),Integer.parseInt(inMemProc[3]),Integer.parseInt(inMemProc[4]),core2Procs.size());
+                core2Procs.add(newProc);
+            }
+        }
+    }
     public void loadMemoryDynamic(List<String[]> code,int sizeOfMemory,int memorySize,int sizeOfVirtual,int virtualSize){
         for(int i=0;i<code.size();i++){
             String[] actual = code.get(i);
@@ -26,10 +46,12 @@ public class Data {
             String[] process = {actual[0],actual[4]};
             if((sizeOfMemory+weight)<=memorySize){
                 sizeOfMemory+=weight;   
-                memoryProcesses.add(process);                
+                memoryProcesses.add(process);
+                addToCore(actual);
             }else if((sizeOfVirtual+weight)<=virtualSize){
                 sizeOfVirtual+=weight;
                 virtualProcesses.add(process);
+                addToCore(actual);
             }
             else{
                 System.out.println("Proceso "+(i+1)+" no puede entrar");
@@ -54,12 +76,14 @@ public class Data {
             if((sizeOfMemory+pageSize)<=memorySize){
                 sizeOfMemory+=pageSize;   
                 memoryProcesses.add(process);
+                addToCore(actual);
                 if(!(remaining[0].equals(""))){
                     memoryProcesses.add(remaining);
                 }
             }else if((sizeOfVirtual+pageSize)<=virtualSize){
                 sizeOfVirtual+=pageSize;
                 virtualProcesses.add(process);
+                addToCore(actual);
                 if(!(remaining[0].equals(""))){
                     virtualProcesses.add(remaining);
                 }
@@ -212,6 +236,7 @@ public class Data {
                     process[1]=pages.get(k);
                     String[] realProcess = {process[0],pages.get(k)};
                     memoryProcesses.add(realProcess);
+                    addToCore(actual);
                 }
                 
                                 
@@ -223,6 +248,7 @@ public class Data {
                     process[1]=pages.get(w);
                     String[] realProcess = {process[0],pages.get(w)};
                     virtualProcesses.add(realProcess);
+                    addToCore(actual);
                 }
             }
             else{
