@@ -816,6 +816,7 @@ public class mainWindow extends javax.swing.JFrame {
                 "Process", "Service Time", "Arrival Time", "Priority", "Size", "⦾"
             }
         ));
+        listProcesses.setEnabled(false);
         jScrollPane8.setViewportView(listProcesses);
 
         getContentPane().add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 440, 160));
@@ -886,9 +887,10 @@ public class mainWindow extends javax.swing.JFrame {
                 {"----------", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Process", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
+                "Procesos", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
             }
         ));
+        jTable2.setEnabled(false);
         jScrollPane5.setViewportView(jTable2);
 
         getContentPane().add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 420, 1280, 120));
@@ -903,9 +905,10 @@ public class mainWindow extends javax.swing.JFrame {
                 {"----------", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Process", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
+                "Procesos", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
             }
         ));
+        jTable1.setEnabled(false);
         jScrollPane4.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 1280, 120));
@@ -921,13 +924,14 @@ public class mainWindow extends javax.swing.JFrame {
                 "", "", "", "", "", "", "", ""
             }
         ));
+        jTable3.setEnabled(false);
         jScrollPane6.setViewportView(jTable3);
 
         getContentPane().add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 610, 550, 75));
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Average"},
+                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Promedio"},
                 {"TF", null, null, null, null, null, null, null},
                 {"TR", null, null, null, null, null, null, null},
                 {"TR/TS", null, null, null, null, null, null, null}
@@ -936,6 +940,7 @@ public class mainWindow extends javax.swing.JFrame {
                 "", "", "", "", "", "", "", ""
             }
         ));
+        jTable4.setEnabled(false);
         jScrollPane7.setViewportView(jTable4);
 
         getContentPane().add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 610, 550, 75));
