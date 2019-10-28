@@ -808,7 +808,7 @@ public class mainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Proceso", "Ráfaga", "T. de llegada", "Prioridad", "Tamaño", "⦾"
+                "Process", "Service Time", "Arrival Time", "Priority", "Size", "⦾"
             }
         ));
         jScrollPane8.setViewportView(listProcesses);
@@ -817,12 +817,12 @@ public class mainWindow extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Resultados de la planificación en el Nucleo 2");
+        jLabel6.setText("Core 2 Result Table");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 570, 350, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Resultados de la planificación en el Nucleo 1");
+        jLabel7.setText("Core 1 Result Table");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 570, 350, 30));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -844,12 +844,12 @@ public class mainWindow extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Nucleo 2");
+        jLabel4.setText("Core 2");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 70, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Nucleo 1");
+        jLabel5.setText("Core 1");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -881,7 +881,7 @@ public class mainWindow extends javax.swing.JFrame {
                 {"----------", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Procesos", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
+                "Process", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
             }
         ));
         jScrollPane5.setViewportView(jTable2);
@@ -898,7 +898,7 @@ public class mainWindow extends javax.swing.JFrame {
                 {"----------", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Procesos", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
+                "Process", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80"
             }
         ));
         jScrollPane4.setViewportView(jTable1);
@@ -907,7 +907,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Promedio"},
+                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Average"},
                 {"TF", null, null, null, null, null, null, null},
                 {"TR", null, null, null, null, null, null, null},
                 {"TR/TS", null, null, null, null, null, null, null}
@@ -922,7 +922,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Promedio"},
+                {null, "--------", "--------", "--------", "--------", "--------", "--------", "Average"},
                 {"TF", null, null, null, null, null, null, null},
                 {"TR", null, null, null, null, null, null, null},
                 {"TR/TS", null, null, null, null, null, null, null}

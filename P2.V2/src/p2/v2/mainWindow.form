@@ -41,11 +41,11 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="0">
-                <Column editable="true" title="Proceso" type="java.lang.Object"/>
-                <Column editable="true" title="R&#xe1;faga" type="java.lang.Object"/>
-                <Column editable="true" title="T. de llegada" type="java.lang.Object"/>
-                <Column editable="true" title="Prioridad" type="java.lang.Object"/>
-                <Column editable="true" title="Tama&#xf1;o" type="java.lang.Object"/>
+                <Column editable="true" title="Process" type="java.lang.Object"/>
+                <Column editable="true" title="Service Time" type="java.lang.Object"/>
+                <Column editable="true" title="Arrival Time" type="java.lang.Object"/>
+                <Column editable="true" title="Priority" type="java.lang.Object"/>
+                <Column editable="true" title="Size" type="java.lang.Object"/>
                 <Column editable="true" title="&#x29be;" type="java.lang.Object"/>
               </Table>
             </Property>
@@ -61,7 +61,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Resultados de la planificaci&#xf3;n en el Nucleo 2"/>
+        <Property name="text" type="java.lang.String" value="Core 2 Result Table"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -77,7 +77,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Resultados de la planificaci&#xf3;n en el Nucleo 1"/>
+        <Property name="text" type="java.lang.String" value="Core 1 Result Table"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -161,7 +161,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Nucleo 2"/>
+        <Property name="text" type="java.lang.String" value="Core 2"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -177,7 +177,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Nucleo 1"/>
+        <Property name="text" type="java.lang.String" value="Core 1"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -256,7 +256,7 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="81" rowCount="6">
-                <Column editable="true" title="Procesos" type="java.lang.Object">
+                <Column editable="true" title="Process" type="java.lang.Object">
                   <Data value="----------"/>
                   <Data value="----------"/>
                   <Data value="----------"/>
@@ -366,7 +366,7 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="81" rowCount="6">
-                <Column editable="true" title="Procesos" type="java.lang.Object">
+                <Column editable="true" title="Process" type="java.lang.Object">
                   <Data value="----------"/>
                   <Data value="----------"/>
                   <Data value="----------"/>
@@ -519,7 +519,7 @@
                   <Data value="null"/>
                 </Column>
                 <Column editable="true" title="" type="java.lang.Object">
-                  <Data value="Promedio"/>
+                  <Data value="Average"/>
                   <Data value="null"/>
                   <Data value="null"/>
                   <Data value="null"/>
@@ -589,7 +589,7 @@
                   <Data value="null"/>
                 </Column>
                 <Column editable="true" title="" type="java.lang.Object">
-                  <Data value="Promedio"/>
+                  <Data value="Average"/>
                   <Data value="null"/>
                   <Data value="null"/>
                   <Data value="null"/>
