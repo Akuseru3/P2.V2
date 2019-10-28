@@ -186,20 +186,23 @@ public class mainWindow extends javax.swing.JFrame {
                         indexes1.add(listSpace1-1);
                     }
                 }
-                for(int k=weight;k<pageSize;k++){
-                    if((index1%pageSize)==0){                        
-                        memoryData.addElement("------Page: "+pageCount1+" ------");
-                        pageCount1++;
+                if(weight!=0){
+                    for(int k=weight;k<pageSize;k++){
+                        System.out.println("KK: "+k);
+                        if((index1%pageSize)==0){                        
+                            memoryData.addElement("------Page: "+pageCount1+" ------");
+                            pageCount1++;
+                            listSpace1++;
+                            if(tipo1==0){
+                                indexes1.add(listSpace1-1);
+                            }
+                        }                    
+                        index1++;
+                        memoryData.addElement(index1+". FREE SPACE");
                         listSpace1++;
                         if(tipo1==0){
                             indexes1.add(listSpace1-1);
                         }
-                    }                    
-                    index1++;
-                    memoryData.addElement(index1+". FREE SPACE");
-                    listSpace1++;
-                    if(tipo1==0){
-                        indexes1.add(listSpace1-1);
                     }
                 }                
             }
@@ -233,20 +236,22 @@ public class mainWindow extends javax.swing.JFrame {
                         indexes2.add(listSpace2-1);
                     }
                 }
-                for(int k=weight;k<pageSize;k++){
-                    if((index2%pageSize)==0){                        
-                        virtualData.addElement("------Page: "+pageCount2+" ------");
-                        pageCount2++;
+                if(weight!=0){
+                    for(int k=weight;k<pageSize;k++){
+                        if((index2%pageSize)==0){                        
+                            virtualData.addElement("------Page: "+pageCount2+" ------");
+                            pageCount2++;
+                            listSpace2++;
+                            if(tipo2==0){
+                                indexes2.add(listSpace2-1);
+                            }
+                        }                    
+                        index2++;
+                        virtualData.addElement(index2+". FREE SPACE");
                         listSpace2++;
                         if(tipo2==0){
                             indexes2.add(listSpace2-1);
                         }
-                    }                    
-                    index2++;
-                    virtualData.addElement(index2+". FREE SPACE");
-                    listSpace2++;
-                    if(tipo2==0){
-                        indexes2.add(listSpace2-1);
                     }
                 }
             }
