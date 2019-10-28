@@ -271,7 +271,8 @@ public class mainWindow extends javax.swing.JFrame {
             int memoryFree=0;
             int virtualFree=0;
             
-            for(int i=0;i<memoryInfo.memoryProcesses.size();i++){                
+            for(int i=0;i<memoryInfo.memoryProcesses.size();i++){
+                                   
                 if(memoryInfo.memoryProcesses.get(i)[1].equals("RMNG")){
                     memoryData.addElement(memoryInfo.memoryProcesses.get(i)[0]);
                     listSpace1++;
@@ -285,6 +286,9 @@ public class mainWindow extends javax.swing.JFrame {
                             memoryData.addElement("------Partition: "+pageCount1+" ------");
                             listSpace1++;
                             pageCount1++;
+                            if(tipo1==0){
+                                indexes1.add(listSpace1-1);
+                            }
                         }                    
                         index1++;
                         listSpace1++;
@@ -298,6 +302,9 @@ public class mainWindow extends javax.swing.JFrame {
                             memoryData.addElement("------Partition: "+pageCount1+" ------");
                             listSpace1++;                            
                             pageCount1++;
+                            if(tipo1==0){
+                                indexes1.add(listSpace1-1);
+                            }
                         }                    
                         index1++;
                         listSpace1++;
@@ -318,6 +325,7 @@ public class mainWindow extends javax.swing.JFrame {
                 memoryData.addElement("----- "+(memorySize-(index1))+" unused spaces left-----");                    
             }
             for(int i=0;i<memoryInfo.virtualProcesses.size();i++){
+                System.out.println(listSpace2); 
                 if(memoryInfo.virtualProcesses.get(i)[1].equals("RMNG")){
                     virtualData.addElement(memoryInfo.virtualProcesses.get(i)[0]);
                     listSpace2++;
@@ -331,25 +339,32 @@ public class mainWindow extends javax.swing.JFrame {
                             virtualData.addElement("------Partition: "+pageCount2+" ------");
                             pageCount2++;
                             listSpace2++;
+                            if(tipo2==0){
+                                indexes2.add(listSpace2-1);
+                            } 
                         }                    
                         index2++;
                         listSpace2++;
                         virtualData.addElement(index2+". "+memoryInfo.virtualProcesses.get(i)[0]);
                         if(tipo2==0){
-                            indexes2.add(listSpace2);
+                            indexes2.add(listSpace2-1);
                         }
                     }
                     for(int k=weight;k<pageSize;k++){
                         if((index2%pageSize)==0){                        
                             virtualData.addElement("------Partition: "+pageCount2+" ------");
                             pageCount2++;
+                            listSpace2++;
+                            if(tipo2==0){
+                                indexes2.add(listSpace2-1);
+                            } 
                         }                    
                         index2++;
                         listSpace2++;
                         virtualData.addElement(index2+". FREE SPACE");
                         virtualFree+=1;
                         if(tipo2==0){
-                            indexes2.add(listSpace2);
+                            indexes2.add(listSpace2-1);
                         }
                     }
                     if(tipo2==0){

@@ -575,19 +575,23 @@ public class configWindow extends javax.swing.JFrame {
             String segment = txtSegment.getText().trim();
             try{
                 int segmentSize = Integer.parseInt(segment);
-                if((memorySize-segmentSize)>=0){
-                    memorySize= memorySize-segmentSize;
-                    //System.out.println(memorySize);
-                    DefaultListModel<String> model = new DefaultListModel<>();
-                    int i;
-                    for(i=0;i<segmentList.size();i++){
-                        model.addElement("Segment "+(i+1)+" | Size-> "+segmentList.get(i));                
+                if(segmentSize>0){
+                    if((memorySize-segmentSize)>=0){
+                        memorySize= memorySize-segmentSize;
+                        //System.out.println(memorySize);
+                        DefaultListModel<String> model = new DefaultListModel<>();
+                        int i;
+                        for(i=0;i<segmentList.size();i++){
+                            model.addElement("Segment "+(i+1)+" | Size-> "+segmentList.get(i));                
+                        }
+                        model.addElement("Segment "+(i+1)+" | Size-> "+Integer.toString(segmentSize));
+                        segmentList.add(segmentSize);
+                        listSegments.setModel(model);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Can't add more segments");
                     }
-                    model.addElement("Segment "+(i+1)+" | Size-> "+Integer.toString(segmentSize));
-                    segmentList.add(segmentSize);
-                    listSegments.setModel(model);
                 }else{
-                    JOptionPane.showMessageDialog(null, "Can't add more segments");
+                    JOptionPane.showMessageDialog(null, "Not a valid segment");
                 }
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Not a valid segment");
@@ -659,19 +663,23 @@ public class configWindow extends javax.swing.JFrame {
             String segment = txtSegmentVirtual.getText().trim();
             try{
                 int segmentSize = Integer.parseInt(segment);
-                if((virtualSize-segmentSize)>=0){
-                    virtualSize= virtualSize-segmentSize;
-                    //System.out.println(virtualSize);
-                    DefaultListModel<String> model = new DefaultListModel<>();
-                    int i;
-                    for(i=0;i<segmentListVirtual.size();i++){
-                        model.addElement("Segment "+(i+1)+" | Size-> "+segmentListVirtual.get(i));                
+                if(segmentSize>0){
+                    if((virtualSize-segmentSize)>=0){
+                        virtualSize= virtualSize-segmentSize;
+                        //System.out.println(virtualSize);
+                        DefaultListModel<String> model = new DefaultListModel<>();
+                        int i;
+                        for(i=0;i<segmentListVirtual.size();i++){
+                            model.addElement("Segment "+(i+1)+" | Size-> "+segmentListVirtual.get(i));                
+                        }
+                        model.addElement("Segment "+(i+1)+" | Size-> "+Integer.toString(segmentSize));
+                        segmentListVirtual.add(segmentSize);
+                        listSegmentVirtual.setModel(model);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Can't add more segments");
                     }
-                    model.addElement("Segment "+(i+1)+" | Size-> "+Integer.toString(segmentSize));
-                    segmentListVirtual.add(segmentSize);
-                    listSegmentVirtual.setModel(model);
                 }else{
-                    JOptionPane.showMessageDialog(null, "Can't add more segments");
+                    JOptionPane.showMessageDialog(null, "Not a valid segment");
                 }
             }catch(NumberFormatException e){
                 JOptionPane.showMessageDialog(null, "Not a valid segment");
