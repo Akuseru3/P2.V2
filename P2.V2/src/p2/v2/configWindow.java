@@ -389,7 +389,12 @@ public class configWindow extends javax.swing.JFrame {
                 Integer.parseInt(newLine[2]);
                 Integer.parseInt(newLine[3]);
                 Integer.parseInt(newLine[4]);
-                finalCode.add(newLine);
+                if(Integer.parseInt(newLine[1])>0 && Integer.parseInt(newLine[2])>=0 && Integer.parseInt(newLine[3])>0 && Integer.parseInt(newLine[4])>0){
+                    finalCode.add(newLine);
+                }
+                else{
+                    return false;
+                }
             }
             catch(Exception e){
                 return false;

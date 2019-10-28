@@ -35,6 +35,8 @@ public class mainWindow extends javax.swing.JFrame {
     DefaultListModel<String> virtualData = new DefaultListModel<>();
     Nucleo nucleo1;
     Nucleo nucleo2;
+    List<Integer> finishedProcesses = new ArrayList<>();
+    Data mem;
     /**
      * Creates new form mainWindow
      */
@@ -76,7 +78,36 @@ public class mainWindow extends javax.swing.JFrame {
         
     }
     private void changeUnsusedColor(Data memoryData){
-        System.out.println(Arrays.toString(memoryData.unusedProcesses.toArray()));
+        mem = memoryData;
+        listProcesses.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                if(finishedProcesses.contains(row)){
+                    l.setBackground(Color.decode("#ed3f45"));
+                }
+                else if(memoryData.unusedProcesses.contains(row)){
+                    l.setBackground(Color.decode("#8d8d8d"));
+                }
+                else if(memoryData.core1Processes.contains(row)){
+                    l.setBackground(Color.decode("#267f3d"));
+                }
+                else if(memoryData.core2Processes.contains(row)){
+                    l.setBackground(Color.decode("#285e93"));
+                }
+                else if(memoryData.core1UnusedProcesses.contains(row)){
+                    l.setBackground(Color.decode("#83c665"));
+                }
+                else if(memoryData.core2UnusedProcesses.contains(row)){
+                    l.setBackground(Color.decode("#5595d3"));
+                }
+                else{
+                    l.setBackground(Color.WHITE);
+                }
+                return l;
+            }
+        }); 
+        jScrollPane8.repaint();
         //System.out.println("Donde pinto: "+());
         /*listProcesses.setCellRenderer(new DefaultListCellRenderer() {
         @Override
@@ -506,6 +537,8 @@ public class mainWindow extends javax.swing.JFrame {
     
     public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
         initComponents();
+        listProcesses.getColumnModel().getColumn(5).setMaxWidth(25);
+        listProcesses.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         JTableHeader head1 = jTable1.getTableHeader();
         jTable1.getColumnModel().getColumn(0).setMinWidth(70);
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
@@ -537,12 +570,24 @@ public class mainWindow extends javax.swing.JFrame {
         nucleo1 = new Nucleo(pCpuType,memoryInfo.core1Procs,pQuantum);
         nucleo2 = new Nucleo(pCpuType,memoryInfo.core2Procs,pQuantum);
         startN1();
+        startN2();
     }
 
     public mainWindow(List<String[]> pCode,int pPageSize,String pMemoryType,ArrayList<Integer> pPartsList,ArrayList<Integer> pPartsListVirtual,String pCpuType,int pQuantum,int pMemorySize,int pVirtualSize){
         initComponents();
+        listProcesses.getColumnModel().getColumn(5).setMaxWidth(25);
+        listProcesses.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        JTableHeader head1 = jTable1.getTableHeader();
+        jTable1.getColumnModel().getColumn(0).setMinWidth(70);
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        head1.setFont(new Font("Segoe UI",Font.PLAIN,10));
+        JTableHeader head2 = jTable2.getTableHeader();
+        jTable2.getColumnModel().getColumn(0).setMinWidth(70);
+        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        head2.setFont(new Font("Segoe UI",Font.PLAIN,10)); 
         code=pCode;memoryType=pMemoryType;partsList=pPartsList;partsListVirtual=pPartsListVirtual;
         cpuType=pCpuType;quantum= pQuantum;memorySize=pMemorySize;virtualSize=pVirtualSize;
+        
         pageSize=pPageSize;
         segmentsMemoryMain = pPartsList;
         segmentsVirtualMain = pPartsListVirtual;
@@ -552,6 +597,10 @@ public class mainWindow extends javax.swing.JFrame {
         memoryInfo.loadMemorySegments(code,pageSize,sizeOfMemory,memorySize,partsList,partsListVirtual);
         
         setMemorySegments(memoryInfo);
+        nucleo1 = new Nucleo(pCpuType,memoryInfo.core1Procs,pQuantum);
+        nucleo2 = new Nucleo(pCpuType,memoryInfo.core2Procs,pQuantum);
+        startN1();
+        startN2();
     }
     
     public void startN1(){
@@ -571,12 +620,14 @@ public class mainWindow extends javax.swing.JFrame {
                 for(int i = 0; i<80;i++){
                     for(int j = 0; j<nucleo1.results.size();j++){
                         ProcessResult result = nucleo1.results.get(j);
-                        if(result.finalTime+2 == i){
+                        if(result.finalTime+1 == i){
                             DefaultTableModel modelStats = (DefaultTableModel)jTable3.getModel();
                             modelStats.setValueAt(result.finalTime, 1, result.tablePosition+1);
                             modelStats.setValueAt(result.turnAround, 2, result.tablePosition+1);
                             modelStats.setValueAt(result.turndService, 3, result.tablePosition+1);
                             cont+=1;
+                            finishedProcesses.add(mem.core1Processes.get(nucleo1.cargados.get(result.tablePosition).corePos));
+                            changeUnsusedColor(mem);
                             break;
                         }
                     }
@@ -623,6 +674,77 @@ public class mainWindow extends javax.swing.JFrame {
         };
         t.start();
     }
+    public void startN2(){
+        DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
+        for(int i = 0; i<nucleo2.cargados.size();i++){
+            model.setValueAt(nucleo2.cargados.get(i).name, i, 0);
+        }
+        DefaultTableModel modelStats = (DefaultTableModel)jTable4.getModel();
+        for(int i = 0; i<nucleo2.cargados.size();i++){
+            modelStats.setValueAt(nucleo2.cargados.get(i).name, 0, i+1);
+        }
+        Thread t = new Thread(){
+            public void run(){
+                System.out.println(nucleo2.results.size());
+                int cont = 0;
+                System.out.println("");
+                for(int i = 0; i<80;i++){
+                    for(int j = 0; j<nucleo2.results.size();j++){
+                        ProcessResult result = nucleo2.results.get(j);
+                        if(result.finalTime+1 == i){
+                            DefaultTableModel modelStats = (DefaultTableModel)jTable4.getModel();
+                            modelStats.setValueAt(result.finalTime, 1, result.tablePosition+1);
+                            modelStats.setValueAt(result.turnAround, 2, result.tablePosition+1);
+                            modelStats.setValueAt(result.turndService, 3, result.tablePosition+1);
+                            cont+=1;
+                            finishedProcesses.add(mem.core2Processes.get(nucleo2.cargados.get(result.tablePosition).corePos));
+                            changeUnsusedColor(mem);
+                            break;
+                        }
+                    }
+                    for(int j = 1; j<i+1;j++){
+                        jTable2.getColumnModel().getColumn(j).setCellRenderer(new DefaultTableCellRenderer() {
+                            @Override
+                            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+                                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+                                if(nucleo2.coreTable[row][col-1] == 1){
+                                    l.setBackground(Color.decode("#4169E1"));
+                                }
+                                else{
+                                    l.setBackground(Color.WHITE);
+                                }
+                                return l;
+                            }
+                        }); 
+                        jScrollPane5.repaint();
+                    }
+                    long initTime = System.currentTimeMillis();
+                    while(System.currentTimeMillis()-initTime<1000){
+                        
+                    }
+                    if(cont>=nucleo2.results.size()){
+                        
+                        System.out.println("salida a mano en momento ->"+i+"---Con contador:"+cont);
+                        break;
+                    }
+                }
+                float avgTr = 0;
+                float avgTDS = 0; 
+                for(int j = 0; j<nucleo2.results.size();j++){
+                    avgTr += nucleo2.results.get(j).turnAround;
+                    avgTDS += nucleo2.results.get(j).turndService;
+                }
+                avgTr = avgTr/nucleo2.results.size();
+                avgTDS = avgTDS/nucleo2.results.size();
+                avgTr = (float)Math.round(avgTr*100.0)/100;
+                avgTDS = (float)Math.round(avgTDS*100.0)/100;
+                DefaultTableModel modelStats = (DefaultTableModel)jTable4.getModel();
+                modelStats.setValueAt(avgTr, 2, 7);
+                modelStats.setValueAt(avgTDS, 3, 7);
+            }
+        };
+        t.start();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -637,11 +759,14 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listMemory = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         listVirtual = new javax.swing.JList<>();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -668,12 +793,12 @@ public class mainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Proceso", "Ráfaga", "T. de llegada", "Prioridad", "Tamaño"
+                "Proceso", "Ráfaga", "T. de llegada", "Prioridad", "Tamaño", "⦾"
             }
         ));
         jScrollPane8.setViewportView(listProcesses);
 
-        getContentPane().add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 440, 160));
+        getContentPane().add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 440, 160));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -688,16 +813,19 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Memory");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, -1, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/p2/v2/cholors_mini.jpg"))); // NOI18N
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 123, 160));
 
         jScrollPane2.setViewportView(listMemory);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 40, 280, 160));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 40, 290, 160));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Virtual Memory");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 10, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 10, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -709,9 +837,24 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel5.setText("Nucleo 1");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
 
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("?");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(1270, 80, 40, -1));
+
+        jButton1.setForeground(new java.awt.Color(44, 47, 51));
+        jButton1.setText("jButton1");
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 100, -1, -1));
+
         jScrollPane3.setViewportView(listVirtual);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 300, 160));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 40, 290, 160));
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -780,7 +923,7 @@ public class mainWindow extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Processes");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 150, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 150, -1));
 
         btnReset.setBackground(new java.awt.Color(255, 102, 102));
         btnReset.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -791,7 +934,7 @@ public class mainWindow extends javax.swing.JFrame {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 20, 90, 40));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 10, 90, 30));
 
         btnBack.setBackground(new java.awt.Color(255, 102, 102));
         btnBack.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -802,7 +945,7 @@ public class mainWindow extends javax.swing.JFrame {
                 btnBackActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 70, 40));
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 70, -1));
         getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 550, 1330, 20));
         getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 1330, 10));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 1330, 10));
@@ -826,6 +969,13 @@ public class mainWindow extends javax.swing.JFrame {
         newWindow.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        jButton1.setOpaque(true);
+        jButton1.setContentAreaFilled(true);
+        jButton1.setBorderPainted(true);
+        jLabel9.setText("wow!");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -865,6 +1015,7 @@ public class mainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnReset;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -872,6 +1023,8 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;

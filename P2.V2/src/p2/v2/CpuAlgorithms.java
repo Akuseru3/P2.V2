@@ -31,9 +31,20 @@ public class CpuAlgorithms {
         }
         int actQuantum = quantum;
         for(int i = 0;i<80;i++){
+            if(actQuantum == 0){
+                actQuantum = quantum;
+                Processs toChange = enEjec.get(0);
+                enEjec.remove(0);
+                enEjec.add(toChange);
+            }
             for(int j = 0; j<cargados.size();j++){
                 if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
-                    enEjec.add(1,cargados.get(j));
+                    if(enEjec.size()!=0){
+                        enEjec.add(1,cargados.get(j));
+                    }
+                    else{
+                        enEjec.add(cargados.get(j));
+                    }
                 }
             }
             if(enEjec.size()!=0){
@@ -45,12 +56,6 @@ public class CpuAlgorithms {
                     enEjec.remove(0);
                     actQuantum = quantum;
                 }
-            }
-            if(actQuantum == 0){
-                actQuantum = quantum;
-                Processs toChange = enEjec.get(0);
-                enEjec.remove(0);
-                enEjec.add(toChange);
             }
         }
     }
@@ -133,11 +138,6 @@ public class CpuAlgorithms {
             }
         }
         for(int i = 0;i<80;i++){
-            for(int j = 0; j<cargados.size();j++){
-                if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
-                    enEjec.add(cargados.get(j));
-                }
-            }
             if(enEjec.size()!=0){
                 tabla[enEjec.get(0).corePos][i] = 1;
                 enEjec.get(0).actTime -= 1;
@@ -145,7 +145,12 @@ public class CpuAlgorithms {
                     results.add(new ProcessResult(i+1,enEjec.get(0).arrivTime,enEjec.get(0).servTime,enEjec.get(0).corePos));
                     enEjec.remove(0);
                 }
-            }  
+            } 
+            for(int j = 0; j<cargados.size();j++){
+                if(cargados.get(j).arrivTime!=0 && i == cargados.get(j).arrivTime-1){
+                    enEjec.add(cargados.get(j));
+                }
+            }
         }
         
     }

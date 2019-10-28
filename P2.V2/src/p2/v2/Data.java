@@ -18,24 +18,35 @@ public class Data {
     List<String[]> memoryProcesses = new ArrayList<>();
     List<String[]> virtualProcesses = new ArrayList<>();
     List<Integer> unusedProcesses = new ArrayList<>();
+    List<Integer> core1Processes = new ArrayList<>();
+    List<Integer> core2Processes = new ArrayList<>();
+    List<Integer> core1UnusedProcesses = new ArrayList<>();
+    List<Integer> core2UnusedProcesses = new ArrayList<>();
     ArrayList<Processs> core1Procs = new ArrayList<Processs>();
     ArrayList<Processs> core2Procs = new ArrayList<Processs>();
     
-    public void addToCore(String[] inMemProc){
+    public void addToCore(String[] inMemProc,int index){
         Random rand = new Random();
         int n = rand.nextInt(2);
         n+=1;
-        n=1;
         if(n == 1){
             if(core1Procs.size() != 6){
                 Processs newProc = new Processs(inMemProc[0],Integer.parseInt(inMemProc[1]),Integer.parseInt(inMemProc[2]),Integer.parseInt(inMemProc[3]),Integer.parseInt(inMemProc[4]),core1Procs.size());
                 core1Procs.add(newProc);
+                core1Processes.add(index);
+            }
+            else{
+                core1UnusedProcesses.add(index);
             }
         }
         else{
             if(core2Procs.size() != 6){
                 Processs newProc = new Processs(inMemProc[0],Integer.parseInt(inMemProc[1]),Integer.parseInt(inMemProc[2]),Integer.parseInt(inMemProc[3]),Integer.parseInt(inMemProc[4]),core2Procs.size());
                 core2Procs.add(newProc);
+                core2Processes.add(index);
+            }
+            else{
+                core2UnusedProcesses.add(index);
             }
         }
     }
@@ -47,11 +58,11 @@ public class Data {
             if((sizeOfMemory+weight)<=memorySize){
                 sizeOfMemory+=weight;   
                 memoryProcesses.add(process);
-                addToCore(actual);
+                addToCore(actual,i);
             }else if((sizeOfVirtual+weight)<=virtualSize){
                 sizeOfVirtual+=weight;
                 virtualProcesses.add(process);
-                addToCore(actual);
+                addToCore(actual,i);
             }
             else{
                 System.out.println("Proceso "+(i+1)+" no puede entrar");
@@ -76,14 +87,14 @@ public class Data {
             if((sizeOfMemory+pageSize)<=memorySize){
                 sizeOfMemory+=pageSize;   
                 memoryProcesses.add(process);
-                addToCore(actual);
+                addToCore(actual,i);
                 if(!(remaining[0].equals(""))){
                     memoryProcesses.add(remaining);
                 }
             }else if((sizeOfVirtual+pageSize)<=virtualSize){
                 sizeOfVirtual+=pageSize;
                 virtualProcesses.add(process);
-                addToCore(actual);
+                addToCore(actual,i);
                 if(!(remaining[0].equals(""))){
                     virtualProcesses.add(remaining);
                 }
@@ -142,6 +153,7 @@ public class Data {
                     addProcess(k,process);                    
                     flag=1;
                     entryFlag=1;
+                    addToCore(actual,i);
                     break; 
                 }
                 
@@ -162,6 +174,7 @@ public class Data {
                             segmentedVirtual.add(k, process);
                             //flag=2;
                             entryFlag=1;
+                            addToCore(actual,i);
                             break;
                         }catch(Exception e){
                             System.out.println("Se cayo");
@@ -170,9 +183,12 @@ public class Data {
                                 segmentedVirtual.add(j,process1);
                             }
                             segmentedVirtual.add(k, process);
+                            entryFlag=1;
+                            addToCore(actual,i);
                             //flag=2;
                             break;
-                        }                        
+                        }  
+                        
                     }
                 }
             }
@@ -236,7 +252,7 @@ public class Data {
                     process[1]=pages.get(k);
                     String[] realProcess = {process[0],pages.get(k)};
                     memoryProcesses.add(realProcess);
-                    addToCore(actual);
+                    addToCore(actual,i);
                 }
                 
                                 
@@ -248,7 +264,7 @@ public class Data {
                     process[1]=pages.get(w);
                     String[] realProcess = {process[0],pages.get(w)};
                     virtualProcesses.add(realProcess);
-                    addToCore(actual);
+                    addToCore(actual,i);
                 }
             }
             else{
