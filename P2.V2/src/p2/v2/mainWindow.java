@@ -37,6 +37,8 @@ public class mainWindow extends javax.swing.JFrame {
     Nucleo nucleo2;
     List<Integer> finishedProcesses = new ArrayList<>();
     Data mem;
+    Thread t1;
+    Thread t2;
     /**
      * Creates new form mainWindow
      */
@@ -692,6 +694,7 @@ public class mainWindow extends javax.swing.JFrame {
                 modelStats.setValueAt(avgTDS, 3, 7);
             }
         };
+        t1 = t;
         t.start();
     }
     public void startN2(){
@@ -763,6 +766,7 @@ public class mainWindow extends javax.swing.JFrame {
                 modelStats.setValueAt(avgTDS, 3, 7);
             }
         };
+        t2 = t;
         t.start();
     }
     /**
@@ -990,6 +994,8 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        t1.stop();
+        t2.stop();
         mainWindow newWindow =new mainWindow(code,pageSize,memoryType,partsList,cpuType,quantum,memorySize,virtualSize);
         newWindow.setVisible(true);
         this.dispose();
